@@ -1,6 +1,7 @@
 package com.xiaolong.toothmanager.controller;
 
 
+import com.xiaolong.toothmanager.common.lang.Result;
 import com.xiaolong.toothmanager.entity.SysUser;
 import com.xiaolong.toothmanager.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class SysMenuController extends BaseController {
     SysUserService service;
 
     @GetMapping("test")
-    List<SysUser> getList(){
-        return service.list();
+    public Result<List<SysUser>> getList(){
+        return Result.success(service.list());
     }
 }
