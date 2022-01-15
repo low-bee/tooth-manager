@@ -13,6 +13,16 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  security:
+    user:
+      name: user
+      password: chuanzhi
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
+
+tooth:
+  jwt:
+    header: authorization
+    expire: 604800
+    secret: 00000000000000001111111111111111

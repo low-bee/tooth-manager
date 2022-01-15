@@ -40,7 +40,7 @@ public class Swagger2Config {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 // 标题
-                .title("Spring Boot集成Swagger2")
+                .title("牙齿管理系统")
                 // 接口描述
                 .description("swagger")
                 // 联系方式
