@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-01-12
  */
 @RestController
-@RequestMapping("/sys")
 public class SysUserController extends BaseController {
-    @GetMapping("/userInfo")
+    @GetMapping("/sys/userInfo")
     Result getUserInfo(){
         return Result.success("");
     }

@@ -1,10 +1,7 @@
 package com.xiaolong.toothmanager.config;
 
 import com.xiaolong.toothmanager.common.exception.CaptchaException;
-import com.xiaolong.toothmanager.security.CaptureFilter;
-import com.xiaolong.toothmanager.security.LoginFailureHandler;
-import com.xiaolong.toothmanager.security.LoginSuccessHandler;
-import com.xiaolong.toothmanager.security.UsernamePasswordJsonAuthenticationFilter;
+import com.xiaolong.toothmanager.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,13 +49,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     CaptureFilter captureFilter;
 
+    @Bean
+    JwtAuthorizationFilter jwtAuthorizationFilter() throws Exception {
+        return new JwtAuthorizationFilter(authenticationManager());
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.cors().and().csrf().disable()
                 // 登录配置
                 .formLogin()
-                .successHandler(loginSuccessHandler )
+                .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailureHandler)
                 // 禁用Session
                 .and()
@@ -75,10 +77,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // 配置自定义规则过滤器
                 .and()
+                .addFilter(jwtAuthorizationFilter())
                 .addFilterBefore(captureFilter, UsernamePasswordAuthenticationFilter.class)
 //                .addFilterAt(usernamePasswordJsonAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         ;
-
+        // 自定义账号密码过滤器
         http.addFilterAt(usernamePasswordJsonAuthenticationBean(), UsernamePasswordJsonAuthenticationFilter.class);
     }
 

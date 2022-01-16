@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2022/1/15 6:56 下午
  */
 @RestController
-@RequestMapping("/sys")
 public class UserController {
 
 
