@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaolong.toothmanager.mapper.UserMapper">
+
+
+    <resultMap type="com.xiaolong.toothmanager.entity.userinfo.User" id="UserMap">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="avatarUrl" property="avatarUrl"/>
+        <result column="level" property="level"/>
+        <result column="gender" property="gender"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="telephone" property="telephone"/>
+        <result column="percentage" property="percentage"/>
+
+        <collection property="userHospitalDetails" ofType="com.xiaolong.toothmanager.entity.userinfo.UserHospitalDetail" select="com.xiaolong.toothmanager.mapper.UserHospitalDetailMapper.select" column="id"/>
+    </resultMap>
+<select id="select" resultType="com.xiaolong.toothmanager.entity.userinfo.User" resultMap="UserMap">
+
+    select
+    *
+    from
+    user_info
+    where
+    1=1
+    <if test="username != null and username != ''">
+        AND username=#{username}
+    </if>
+    <if test="hospital != null and hospital != ''">
+        AND hospital=#{hospital}
+    </if>
+    <if test="id != null">
+        AND id=#{id}
+    </if>
+
+</select>
+</mapper>

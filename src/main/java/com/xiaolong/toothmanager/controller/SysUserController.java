@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class SysUserController extends BaseController {
-    @GetMapping("/sys/userInfo")
-    Result getUserInfo(){
-        return Result.success("");
-    }
+//    @GetMapping("/sys/userInfo")
+//    Result getUserInfo(){
+//        return Result.success("");
+//    }
 }

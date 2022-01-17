@@ -75,3 +75,31 @@ CREATE TABLE `sys_user_role` (
   `role_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `user_info`;
+CREATE TABLE `user_info` (
+    `id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `username` varchar(40) not null unique,
+    `password` varchar(40) not null COMMENT 'password',
+    `avatarUrl` text COMMENT '头像地址',
+    `level` int not null default 1 COMMENT '用户等级',
+    `gender` varchar(2) not null default '男' COMMENT '性别',
+    `phone` varchar(20) not null unique COMMENT '移动电话',
+    `email` varchar(50) not null COMMENT '邮箱',
+    `telephone` varchar(20) COMMENT '固定电话',
+    `percentage` smallint not null COMMENT '百分比，0-100'
+
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+
+insert into user_info(id, username, password, avatarUrl, level, gender, phone, email, percentage)
+    values(1, 'user', 'chuanzhi', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 10, '男', '18515747736', 'xiaolongorigin@gmail.com', 10);
+
+
+DROP TABLE if EXISTS `user_hospital_detail`;
+create table user_hospital_detail (
+     `id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+     `username` varchar(40) not null unique,
+     `hospital` varchar(50) ,
+     `address` varchar(50) ,
+     `addressDetail` varchar(200)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;

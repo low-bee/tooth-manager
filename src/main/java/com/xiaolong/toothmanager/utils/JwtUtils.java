@@ -1,12 +1,14 @@
 package com.xiaolong.toothmanager.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -55,4 +57,20 @@ public class JwtUtils {
         return claims.getExpiration().before(new Date());
     }
 
+    // check是否异常
+    public void checkJwt(Claims claims) {
+        if (claims == null) {
+            throw new JwtException("Token异常，jwt非法");
+        }
+        if (this.isTokenExpired(claims)){
+            throw new JwtException("Token异常，Token过期");
+        }
+    }
+
+    public String getUsername(HttpServletRequest request){
+        String token = request.getHeader(this.header);
+        Claims claimByToken = getClaimByToken(token);
+        checkJwt(claimByToken);
+        return claimByToken.getSubject();
+    }
 }
