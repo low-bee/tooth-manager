@@ -1,7 +1,7 @@
 package com.xiaolong.toothmanager.utils;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
@@ -20,10 +20,10 @@ import java.util.concurrent.TimeUnit;
  * @Date 2022/1/13 10:48 下午
  */
 @Component
+@RequiredArgsConstructor
 public class RedisUtil {
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
 
     /**
      * 指定缓存失效时间

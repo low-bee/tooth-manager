@@ -1,10 +1,10 @@
 package com.xiaolong.toothmanager.service.impl;
 
 import com.xiaolong.toothmanager.entity.ddo.UserCheckDo;
-import com.xiaolong.toothmanager.mapper.UserMapper;
 import com.xiaolong.toothmanager.entity.userinfo.User;
+import com.xiaolong.toothmanager.mapper.UserMapper;
 import com.xiaolong.toothmanager.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
  * @Date 2022/1/17 8:43 下午
  */
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserMapper userMapper;
+    private final UserMapper userMapper;
 
 
     @Override

@@ -4,10 +4,9 @@ package com.xiaolong.toothmanager.controller;
 import com.xiaolong.toothmanager.common.lang.Result;
 import com.xiaolong.toothmanager.entity.SysUser;
 import com.xiaolong.toothmanager.service.SysUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -21,13 +20,13 @@ import java.util.List;
  * @since 2022-01-12
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/sys-menu")
 public class SysMenuController extends BaseController {
 
-    @Autowired
-    SysUserService service;
+    private final SysUserService service;
 
-    @GetMapping("test")
+    @GetMapping("/test")
     public Result<List<SysUser>> getList(){
         return Result.success(service.list());
     }

@@ -5,6 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.xiaolong.toothmanager.common.lang.Result;
 import com.xiaolong.toothmanager.utils.HttpServletRequestUtils;
 import com.xiaolong.toothmanager.utils.JwtUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -25,13 +26,12 @@ import java.nio.charset.StandardCharsets;
  * @Date 2022/1/15 6:08 下午
  */
 @Component
+@RequiredArgsConstructor
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    @Autowired
-    JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
-    @Autowired
-    HttpServletRequestUtils httpServletRequestUtils;
+    private final HttpServletRequestUtils httpServletRequestUtils;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {

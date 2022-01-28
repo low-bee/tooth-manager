@@ -1,14 +1,13 @@
 package com.xiaolong.toothmanager.security;
 
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.xiaolong.toothmanager.common.exception.CaptchaException;
 import com.xiaolong.toothmanager.common.lang.Const;
 import com.xiaolong.toothmanager.utils.HttpServletRequestUtils;
 import com.xiaolong.toothmanager.utils.RedisUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,7 +15,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
@@ -26,16 +24,14 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class CaptureFilter extends OncePerRequestFilter {
 
-    @Autowired
-    RedisUtil redisUtil;
+    private final RedisUtil redisUtil;
     
-    @Autowired
-    LoginFailureHandler loginFailureHandler;
+    private final LoginFailureHandler loginFailureHandler;
 
-    @Autowired
-    HttpServletRequestUtils httpServletRequestUtils;
+    private final HttpServletRequestUtils httpServletRequestUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

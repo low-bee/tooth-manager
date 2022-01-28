@@ -1,19 +1,15 @@
 package com.xiaolong.toothmanager.config;
 
-import com.xiaolong.toothmanager.common.exception.CaptchaException;
 import com.xiaolong.toothmanager.security.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * @Description: Security Config
@@ -22,6 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -40,14 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
 
-    @Autowired
-    LoginFailureHandler loginFailureHandler;
+    private final LoginFailureHandler loginFailureHandler;
 
-    @Autowired
-    LoginSuccessHandler loginSuccessHandler;
+    private final LoginSuccessHandler loginSuccessHandler;
 
-    @Autowired
-    CaptureFilter captureFilter;
+    private final CaptureFilter captureFilter;
 
     @Bean
     JwtAuthorizationFilter jwtAuthorizationFilter() throws Exception {
