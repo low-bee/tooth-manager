@@ -28,24 +28,24 @@ import java.io.IOException;
 public class CaptureFilter extends OncePerRequestFilter {
 
     private final RedisUtil redisUtil;
-    
+
     private final LoginFailureHandler loginFailureHandler;
 
     private final HttpServletRequestUtils httpServletRequestUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String requestURI = request.getRequestURI();
-
-        if ("/login".equals(requestURI) && "POST".equals(request.getMethod())) {
-            // 校验验证码
-            try {
-                validate(request);
-            } catch (CaptchaException e) {
-                // 不正确跳转到认证失败过滤器
-                loginFailureHandler.onAuthenticationFailure(request, response, e );
-            }
-        }
+//        String requestURI = request.getRequestURI();
+//
+//        if ("/login".equals(requestURI) && "POST".equals(request.getMethod())) {
+//            // 校验验证码
+//            try {
+//                validate(request);
+//            } catch (CaptchaException e) {
+//                // 不正确跳转到认证失败过滤器
+//                loginFailureHandler.onAuthenticationFailure(request, response, e );
+//            }
+//        }
         filterChain.doFilter(request, response);
     }
 

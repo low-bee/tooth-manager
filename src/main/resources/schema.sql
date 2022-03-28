@@ -87,12 +87,13 @@ CREATE TABLE `user_info` (
     `phone` varchar(20) not null unique COMMENT '移动电话',
     `email` varchar(50) not null COMMENT '邮箱',
     `telephone` varchar(20) COMMENT '固定电话',
-    `percentage` smallint not null COMMENT '百分比，0-100'
-
+    `percentage` smallint not null COMMENT '百分比，0-100',
+    `nick_name` varchar(20) not null COMMENT '用户类型',
+    `enable` boolean not null COMMENT '用户是否激活'
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
-insert into user_info(id, username, password, avatarUrl, level, gender, phone, email, percentage)
-    values(1, 'user', 'chuanzhi', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 10, '男', '18515747736', 'xiaolongorigin@gmail.com', 10);
+insert into user_info(id, `username`, `password`, avatarUrl, level, gender, phone, email, percentage, nick_name, `enable`)
+    values(1, 'user', 'chuanzhi', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 10, '男', '18515747736', 'xiaolongorigin@gmail.com', 10, '管理员', 1);
 
 
 DROP TABLE if EXISTS `user_hospital_detail`;

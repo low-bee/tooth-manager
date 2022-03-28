@@ -37,7 +37,7 @@ public class UsernamePasswordJsonAuthenticationFilter extends UsernamePasswordAu
         JSONObject jsonRequest;
         if (isChange != null && isChange.length() > 0){
             jsonRequest = JSONUtil.parseObj(isChange);
-        }else {
+        } else {
             jsonRequest = httpServletRequestUtils.getJsonRequest(request);
         }
         username = jsonRequest.getStr("username");

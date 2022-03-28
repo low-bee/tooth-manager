@@ -17,5 +17,10 @@ public interface UserMapper {
      */
     User select(UserCheckDo userCheck);
 
+    /**
+     * 通过用户名查询用户
+     */
+    User selectByUserName(String username);
+
 
 }
