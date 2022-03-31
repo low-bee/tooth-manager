@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 /**
  * @Description: user info
  * @Author xiaolong
@@ -41,14 +39,6 @@ public class User {
     private String email;
     private String telephone;
     private String percentage;
-    /**
-     * 用户类型 医生、管理员、病人
-     */
-    private String nickName;
-    /**
-     * 用户地址详情
-     */
-    @JsonProperty("detail")
-    private List<UserHospitalDetail> userHospitalDetails;
+
 
 }
