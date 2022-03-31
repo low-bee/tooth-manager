@@ -1,8 +1,7 @@
 package com.xiaolong.toothmanager.service.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +13,9 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto extends BaseDTO implements Serializable {
 
     private Long id;
@@ -25,6 +27,8 @@ public class UserDto extends BaseDTO implements Serializable {
 //    private DeptSmallDto dept;
 
     private Long deptId;
+
+    private Integer level;
 
     private String username;
 
@@ -49,4 +53,6 @@ public class UserDto extends BaseDTO implements Serializable {
     private Boolean isAdmin = false;
 
     private Date pwdResetTime;
+
+    private Integer percentage;
 }

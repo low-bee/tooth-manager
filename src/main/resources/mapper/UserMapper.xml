@@ -49,4 +49,28 @@
 
         where `username` = #{username}
     </select>
+
+    <select id="findByUsername" resultType="com.xiaolong.toothmanager.service.dto.UserDto">
+        select
+                id,
+                username,
+                password,
+                avatarUrl as avatarPath,
+                level,
+                gender,
+                phone,
+                email,
+                nick_name as nickName,
+                enable as enabled,
+                isAdmin,
+                pwdResetTime
+        from
+            user_info
+        where `username` = #{username}
+    </select>
+
+    <insert id="insertUserDto">
+        insert into user_info (`username`, `password`, avatarUrl, level, gender, phone, email, percentage, nick_name, `enable`, isAdmin) values
+        ( #{username}, #{password}, #{avatarPath}, #{level}, #{gender}, #{phone}, #{email}, #{percentage}, #{nickName}, #{enabled}, #{isAdmin})
+    </insert>
 </mapper>

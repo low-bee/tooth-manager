@@ -1,7 +1,7 @@
 package com.xiaolong.toothmanager.service;
 
 import com.xiaolong.toothmanager.entity.userinfo.User;
-import org.springframework.stereotype.Service;
+import com.xiaolong.toothmanager.service.dto.UserDto;
 
 /**
  * @Description: userService 接口
@@ -23,4 +23,13 @@ public interface UserService {
      * 通过用户医院查询用户
      */
     User selectByHospital(String hospital);
+
+    /**
+     * 通过用户名查询用户
+     * @param username
+     * @return
+     */
+    UserDto findByUsername(String username);
+
+    boolean insertUser(UserDto userDto);
 }

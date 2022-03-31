@@ -2,6 +2,7 @@ package com.xiaolong.toothmanager.mapper;
 
 import com.xiaolong.toothmanager.entity.ddo.UserCheckDo;
 import com.xiaolong.toothmanager.entity.userinfo.User;
+import com.xiaolong.toothmanager.service.dto.UserDto;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -23,4 +24,7 @@ public interface UserMapper {
     User selectByUserName(String username);
 
 
+    UserDto findByUsername(String username);
+
+    boolean insertUserDto(UserDto userDto);
 }

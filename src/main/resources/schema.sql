@@ -80,20 +80,25 @@ DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
     `id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `username` varchar(40) not null unique,
-    `password` varchar(40) not null COMMENT 'password',
-    `avatarUrl` text COMMENT '头像地址',
+    `password` varchar(200) not null COMMENT 'password',
+    `avatarUrl` varchar(100) COMMENT '头像地址',
     `level` int not null default 1 COMMENT '用户等级',
-    `gender` varchar(2) not null default '男' COMMENT '性别',
+    `gender` varchar(2) null default '男' COMMENT '性别',
     `phone` varchar(20) not null unique COMMENT '移动电话',
-    `email` varchar(50) not null COMMENT '邮箱',
+    `email` varchar(50) COMMENT '邮箱',
     `telephone` varchar(20) COMMENT '固定电话',
-    `percentage` smallint not null COMMENT '百分比，0-100',
-    `nick_name` varchar(20) not null COMMENT '用户类型',
-    `enable` boolean not null COMMENT '用户是否激活'
+    `percentage` smallint COMMENT '百分比，0-100',
+    `nick_name` varchar(20) not null default "医生" COMMENT '用户类型',
+    `enable` boolean not null default false COMMENT '用户是否激活',
+    `isAdmin` boolean not null default 0 COMMENT '是否是管理员',
+    `pwdResetTime` datetime null COMMENT '密码修改时间',
+    `createTime` datetime null COMMENT '创建时间',
+    `updatedTime` datetime null COMMENT '修改时间',
+    `updatedEr` varchar(40) null COMMENT '修改人'
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
-insert into user_info(id, `username`, `password`, avatarUrl, level, gender, phone, email, percentage, nick_name, `enable`)
-    values(1, 'user', 'chuanzhi', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 10, '男', '18515747736', 'xiaolongorigin@gmail.com', 10, '管理员', 1);
+insert into user_info(id, `username`, `password`, avatarUrl, level, gender, phone, email, percentage, nick_name, `enable`, pwdResetTime)
+    values(1, 'user', 'chuanzhi', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 10, '男', '18515747736', 'xiaolongorigin@gmail.com', 10, '管理员', 1, now());
 
 
 DROP TABLE if EXISTS `user_hospital_detail`;

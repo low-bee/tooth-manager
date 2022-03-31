@@ -4,6 +4,7 @@ import com.xiaolong.toothmanager.entity.ddo.UserCheckDo;
 import com.xiaolong.toothmanager.entity.userinfo.User;
 import com.xiaolong.toothmanager.mapper.UserMapper;
 import com.xiaolong.toothmanager.service.UserService;
+import com.xiaolong.toothmanager.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User selectByHospital(String hospital) {
         return userMapper.select(UserCheckDo.builder().hospital(hospital).build());
+    }
+
+    @Override
+    public UserDto findByUsername(String username) {
+        return userMapper.findByUsername(username);
+    }
+
+    @Override
+    public boolean insertUser(UserDto userDto) {
+        return userMapper.insertUserDto(userDto);
     }
 }

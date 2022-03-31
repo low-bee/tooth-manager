@@ -20,7 +20,7 @@ public class ConfigBeanConfiguration {
         return new LoginProperties();
     }
 
-    @Bean
+    @Bean("securityProperties")
     @ConfigurationProperties(prefix = "jwt")
     public SecurityProperties securityProperties() {
         return new SecurityProperties();

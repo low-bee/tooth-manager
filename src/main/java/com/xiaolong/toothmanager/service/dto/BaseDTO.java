@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.sql.Timestamp;
 
 /**
- * @Description: TODO(这里用一句话描述这个类的作用)
+ * @Description: 每张表都需要的行
  * @Author xiaolong
  * @Date 2022/3/28 23:04
  */
