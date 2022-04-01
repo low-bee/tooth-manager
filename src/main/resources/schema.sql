@@ -77,7 +77,7 @@ CREATE TABLE `sys_user_role` (
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `user_info`;
-CREATE TABLE `user_info` (
+CREATE TABLE if not exists `user_info` (
     `id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `username` varchar(40) not null unique,
     `password` varchar(200) not null COMMENT 'password',
@@ -97,8 +97,8 @@ CREATE TABLE `user_info` (
     `updatedEr` varchar(40) null COMMENT '修改人'
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
-insert into user_info(id, `username`, `password`, avatarUrl, level, gender, phone, email, percentage, nick_name, `enable`, pwdResetTime)
-    values(1, 'user', 'chuanzhi', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 10, '男', '18515747736', 'xiaolongorigin@gmail.com', 10, '管理员', 1, now());
+-- insert into user_info(id, `username`, `password`, avatarUrl, level, gender, phone, email, percentage, nick_name, `enable`, pwdResetTime)
+--     values(1, 'user', 'chuanzhi', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 10, '男', '18515747736', 'xiaolongorigin@gmail.com', 10, '管理员', 1, now());
 
 
 DROP TABLE if EXISTS `user_hospital_detail`;

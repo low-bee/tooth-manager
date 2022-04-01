@@ -1,5 +1,6 @@
 package com.xiaolong.toothmanager.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import com.xiaolong.toothmanager.service.RegisterService;
 import com.xiaolong.toothmanager.service.UserService;
 import com.xiaolong.toothmanager.service.dto.AuthRegisterDto;
@@ -28,6 +29,7 @@ public class RegisterServiceImpl implements RegisterService {
     public boolean register(AuthRegisterDto authRegisterDto) {
 
         String encodePassword = bCryptPasswordEncoder.encode(authRegisterDto.getPassword());
+        Assert.isTrue(bCryptPasswordEncoder.matches(authRegisterDto.getPassword(), encodePassword));
         authRegisterDto.setPassword(encodePassword);
 
         UserDto userDto = authRegisterDto.toUserDto();

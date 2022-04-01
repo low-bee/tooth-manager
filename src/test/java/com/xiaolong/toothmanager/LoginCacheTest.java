@@ -1,10 +1,12 @@
 package com.xiaolong.toothmanager;
 
-import com.xiaolong.toothmanager.utils.SpringContextHolder;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -16,9 +18,25 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LoginCacheTest {
 
+    private  PasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private  PasswordEncoder bCryptPasswordEncoder2 = new BCryptPasswordEncoder();
+
+    private String test;
+    private String chuanzhi;
+
+    @Before
+    public void init(){
+        chuanzhi = bCryptPasswordEncoder.encode("chuanzhi");
+        test = chuanzhi;
+    }
+
     @Test
     public void test(){
-        SpringContextHolder.getBean(AuthenticationManagerBuilder.class);
-        System.out.println(111);
+        Assert.assertTrue(bCryptPasswordEncoder.matches("chuanzhi", chuanzhi));
+        Assert.assertTrue(bCryptPasswordEncoder2.matches("chuanzhi", chuanzhi));
+        Assert.assertTrue(bCryptPasswordEncoder.matches("chuanzhi", test));
+        Assert.assertTrue(bCryptPasswordEncoder2.matches("chuanzhi", test));
     }
+
+
 }

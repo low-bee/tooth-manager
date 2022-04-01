@@ -10,9 +10,13 @@ import com.xiaolong.toothmanager.service.impl.OnlineUserService;
 import com.xiaolong.toothmanager.service.impl.UserCacheClean;
 import com.xiaolong.toothmanager.utils.RequestMethodEnum;
 import lombok.RequiredArgsConstructor;
+import net.dreamlu.mica.ip2region.config.Ip2regionProperties;
+import net.dreamlu.mica.ip2region.core.Ip2regionSearcher;
+import net.dreamlu.mica.ip2region.impl.Ip2regionSearcherImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,6 +33,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -58,9 +63,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public SecureRandom secureRandom(){
+        return new SecureRandom();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(SecureRandom secureRandom) {
         // 密码加密方式
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2A, secureRandom);
+    }
+
+    @Bean("ip2regionSearcher1")
+    public Ip2regionSearcher ip2regionSearcher(ResourceLoader resourceLoader,
+                                               Ip2regionProperties properties) {
+        return new Ip2regionSearcherImpl(resourceLoader, properties);
     }
 
     @Override
