@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -58,9 +57,10 @@ public class LoginService implements UserDetailsService {
                     throw new BadRequestException("账号未激活！");
                 }
                 jwtUserDto = new JwtUserDto(
-                        user,
-                        dataService.getDeptIds(user),
-                        roleService.mapToGrantedAuthorities(user)
+                        user
+//                        ,
+//                        dataService.getDeptIds(user),
+//                        roleService.mapToGrantedAuthorities(user)
                 );
             }
             return jwtUserDto;
@@ -89,7 +89,7 @@ public class LoginService implements UserDetailsService {
                 throw new RuntimeException(e.getMessage());
             }
             // 检查dataScope是否修改
-            List<Long> dataScopes = jwtUserDto.getDataScopes();
+//            List<Long> dataScopes = jwtUserDto.getDataScopes();
 //            dataScopes.clear();
 //            dataScopes.addAll(dataService.getDeptIds(jwtUserDto.getUser()));
 
@@ -112,9 +112,10 @@ public class LoginService implements UserDetailsService {
                 throw new BadRequestException("账号未激活！");
             }
             return new JwtUserDto(
-                    user,
-                    dataService.getDeptIds(user),
-                    roleService.mapToGrantedAuthorities(user)
+                    user
+//                    ,
+//                    dataService.getDeptIds(user),
+//                    roleService.mapToGrantedAuthorities(user)
             );
         }
 

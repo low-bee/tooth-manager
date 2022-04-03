@@ -1,15 +1,11 @@
 package com.xiaolong.toothmanager.service.dto;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @Description: JwtUserDto 实现了 UserDetails 查询数据库后返回
@@ -22,14 +18,14 @@ public class JwtUserDto implements UserDetails {
 
     private final UserDto user;
 
-    private final List<Long> dataScopes;
+//    private final List<Long> dataScopes;
 
-    @JSONField(serialize = false)
-    private final List<GrantedAuthority> authorities;
+//    @JSONField(serialize = false)
+//    private final List<GrantedAuthority> authorities;
 
-    public Set<String> getRoles() {
-        return authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-    }
+//    public Set<String> getRoles() {
+//        return authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
