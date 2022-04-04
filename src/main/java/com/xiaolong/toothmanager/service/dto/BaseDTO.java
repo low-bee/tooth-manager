@@ -17,13 +17,13 @@ import java.sql.Timestamp;
 @Setter
 public class BaseDTO  implements Serializable {
 
-    private String createBy;
+    private String createdBy;
 
-    private String updateBy;
+    private String updatedBy;
 
-    private Timestamp createTime;
+    private Timestamp createdTime;
 
-    private Timestamp updateTime;
+    private Timestamp updatedTime;
 
     @Override
     public String toString() {

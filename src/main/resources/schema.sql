@@ -76,7 +76,7 @@ CREATE TABLE `sys_user_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
--- DROP TABLE IF EXISTS `user_info`;
+DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE if not exists `user_info` (
     `id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `username` varchar(40) not null unique,
@@ -92,9 +92,10 @@ CREATE TABLE if not exists `user_info` (
     `enable` boolean not null default false COMMENT '用户是否激活',
     `isAdmin` boolean not null default 0 COMMENT '是否是管理员',
     `pwdResetTime` datetime null COMMENT '密码修改时间',
-    `createTime` datetime null COMMENT '创建时间',
+    `createdTime` datetime null COMMENT '创建时间',
+    `createdBy` varchar(40) null COMMENT '创建时间',
     `updatedTime` datetime null COMMENT '修改时间',
-    `updatedEr` varchar(40) null COMMENT '修改人'
+    `updatedBy` varchar(40) null COMMENT '修改人'
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 -- insert into user_info(id, `username`, `password`, avatarUrl, level, gender, phone, email, percentage, nick_name, `enable`, pwdResetTime)
@@ -104,8 +105,15 @@ CREATE TABLE if not exists `user_info` (
 DROP TABLE if EXISTS `user_hospital_detail`;
 create table user_hospital_detail (
      `id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+     `user_id` bigint not null,
      `username` varchar(40) not null unique,
      `hospital` varchar(50) ,
-     `address` varchar(50) ,
-     `addressDetail` varchar(200)
+     `province` varchar(50) ,
+     `city` varchar(50) COMMENT '城市',
+     `low_city` varchar(50) COMMENT '区、县级别',
+     `address_detail` varchar(200) COMMENT '详细地址',
+     `createdBy` varchar(40) null COMMENT '创建人',
+     `createdTime` datetime null COMMENT '创建时间',
+     `updatedTime` datetime null COMMENT '修改时间',
+     `updatedEr` varchar(40) null COMMENT '修改人'
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;

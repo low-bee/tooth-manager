@@ -33,5 +33,8 @@ public class Const {
         public static final String IP_URL = "http://whois.pconline.com.cn/ipJson.jsp?ip=%s&json=true";
     }
 
+    public static final String PREFIX_HOSPITAL = "hospital";
+    public static final String PRE = "pre";
+
 
 }

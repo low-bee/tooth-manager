@@ -4,7 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * @Description: TODO(这里用一句话描述这个类的作用)
@@ -52,7 +52,9 @@ public class UserDto extends BaseDTO implements Serializable {
     @JSONField(serialize = false)
     private Boolean isAdmin = false;
 
-    private Date pwdResetTime;
+    private Timestamp pwdResetTime;
 
     private Integer percentage;
+
+    private UserHospitalDetailDto userHospitalDetail;
 }

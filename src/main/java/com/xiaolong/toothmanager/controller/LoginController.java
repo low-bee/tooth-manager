@@ -123,9 +123,8 @@ public class LoginController extends BaseController {
             throw new BadRequestException("输入的密码为空");
         }
         authRegisterDto.setPassword(password);
-        boolean success = registerService.register(authRegisterDto);
 
-        return success;
+        return registerService.register(authRegisterDto);
     }
 
     @ApiOperation("获取用户信息")

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaolong.toothmanager.mapper.UserHospitalMapper">
+
+<update id="updateByUserId">
+    update user_hospital_detail
+    set username = #{username}, hospital = #{hospital}, province = #{province}, city = #{city}, low_city = #{lowCity}, address_detail = #{addressDetail},
+    updatedTime = #{updatedBy}, updatedEr = #{updatedBy}
+    where user_id = #{userId}
+    </update>
+</mapper>

@@ -1,6 +1,5 @@
 package com.xiaolong.toothmanager.mapper;
 
-import com.xiaolong.toothmanager.entity.userinfo.User;
 
 /**
  * @Description: 用户DAO操作接口

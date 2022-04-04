@@ -1,76 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaolong.toothmanager.mapper.UserMapper">
-    <resultMap type="com.xiaolong.toothmanager.entity.userinfo.User" id="UserMap">
-        <id column="id" property="id"/>
-        <result column="username" property="username"/>
-        <result column="password" property="password"/>
-        <result column="avatarUrl" property="avatarUrl"/>
-        <result column="level" property="level"/>
-        <result column="gender" property="gender"/>
-        <result column="phone" property="phone"/>
-        <result column="email" property="email"/>
-        <result column="telephone" property="telephone"/>
-        <result column="percentage" property="percentage"/>
-        <result column="nick_name" property="nickName"/>
-
-        <collection property="userHospitalDetails" ofType="com.xiaolong.toothmanager.entity.userinfo.UserHospitalDetail"
-                    select="com.xiaolong.toothmanager.mapper.UserHospitalDetailMapper.select" column="id"/>
+    <resultMap id="resMap" type="com.xiaolong.toothmanager.service.dto.UserDto">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="avatarPath" column="avatarUrl"/>
+        <result property="level" column="level"/>
+        <result property="gender" column="gender"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="enabled" column="enable"/>
+        <result property="isAdmin" column="isAdmin"/>
+        <result property="pwdResetTime" column="pwdResetTime"/>
+        <result property="createdBy" column="createdBy"/>
+        <result property="createdTime" column="createdTime"/>
+        <result property="updatedBy" column="updatedBy"/>
+        <result property="updatedTime" column="updatedTime"/>
+<!--        one to one -->
+<!--        如果是一对多，那么需要使用collection 标签-->
+        <association property="userHospitalDetail" javaType="com.xiaolong.toothmanager.service.dto.UserHospitalDetailDto">
+            <result property="id" column="id"/>
+            <result property="userId" column="user_id"/>
+            <result property="username" column="username"/>
+            <result property="province" column="province"/>
+            <result property="city" column="city"/>
+            <result property="lowCity" column="low_city"/>
+            <result property="addressDetail" column="address_detail"/>
+        </association>
     </resultMap>
-    <select id="select" resultType="com.xiaolong.toothmanager.entity.userinfo.User" resultMap="UserMap">
-        select *
-        from user_info
-                where 1 = 1
-        <if test="username != null and username != ''">
-            AND username = #{username}
-        </if>
-        <if test="hospital != null and hospital != ''">
-            AND hospital = #{hospital}
-        </if>
-        <if test="id != null">
-            AND id = #{id}
-        </if>
-    </select>
 
-    <select id="selectByUserName" resultMap="UserMap">
-        select id,
-               username,
-               password,
-               avatarUrl,
-               level,
-               gender,
-               phone,
-               email,
-               telephone,
-               percentage,
-               nick_name
+    <sql id="userInfo">
+        t1.id,
+        t1.username,
+        t1.password,
+        t1.avatarUrl,
+        t1.level,
+        t1.gender,
+        t1.phone,
+        t1.email,
+        t1.nick_name,
+        t1.enable,
+        t1.isAdmin,
+        t1.pwdResetTime,
+        t1.createdBy,
+        t1.createdTime,
+        t1.updatedBy,
+        t1.updatedTime
+    </sql>
+    <sql id="userHospitalDetail">
+        t2.id,
+        t2.user_id,
+        t2.username,
+        t2.province,
+        t2.city,
+        t2.low_city,
+        t2.address_detail,
+        t2.createdBy,
+        t2.createdTime,
+        t2.updatedEr,
+        t2.updatedTime
+    </sql>
 
-        from user_info
-
-        where `username` = #{username}
-    </select>
-
-    <select id="findByUsername" resultType="com.xiaolong.toothmanager.service.dto.UserDto">
+    <select id="findByUsername" resultType="com.xiaolong.toothmanager.service.dto.UserDto" resultMap="resMap">
         select
-                id,
-                username,
-                password,
-                avatarUrl as avatarPath,
-                level,
-                gender,
-                phone,
-                email,
-                nick_name as nickName,
-                enable as enabled,
-                isAdmin,
-                pwdResetTime
+                <include refid="userInfo">
+                </include>,
+                <include refid="userHospitalDetail">
+                </include>
         from
-            user_info
-        where `username` = #{username}
+            user_info as t1 left join
+            user_hospital_detail as t2 on t1.`id`=t2.`user_id`
+        where t1.`username` = #{username}
     </select>
+
 
     <insert id="insertUserDto">
-        insert into user_info (`username`, `password`, avatarUrl, level, gender, phone, email, percentage, nick_name, `enable`, isAdmin) values
-        ( #{username}, #{password}, #{avatarPath}, #{level}, #{gender}, #{phone}, #{email}, #{percentage}, #{nickName}, #{enabled}, #{isAdmin})
+        insert into
+        user_info (`username`, `password`, avatarUrl, level, gender, phone, email, percentage, nick_name, `enable`, isAdmin, createdBy, createdTime) values
+        ( #{username}, #{password}, #{avatarPath}, #{level}, #{gender}, #{phone}, #{email}, #{percentage}, #{nickName}, #{enabled}, #{isAdmin}, #{createdBy}, #{createdTime})
+    </insert>
+
+    <insert id="insertHospital">
+        insert into
+        user_hospital_detail (
+            user_id,
+            `username`,
+            `hospital`,
+            `province`,
+            `city`,
+            `low_city`,
+            `address_detail`,
+            `createdBy`,
+            `createdTime`
+        ) values (#{userId}, #{username}, #{hospital}, #{province}, #{city}, #{lowCity}, #{addressDetail},
+        #{createdBy}, #{createdTime})
     </insert>
 </mapper>

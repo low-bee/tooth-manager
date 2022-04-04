@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.sql.Timestamp;
+
 /**
  * @Description: 注册服务实现类
  * @Author xiaolong
@@ -37,6 +39,8 @@ public class RegisterServiceImpl implements RegisterService {
         userDto.setPercentage(0);
         userDto.setIsAdmin(false);
         userDto.setEnabled(true);
+        userDto.setCreatedBy(authRegisterDto.getUsername());
+        userDto.setCreatedTime(new Timestamp(System.currentTimeMillis()));
 
         try {
             userService.insertUser(userDto);
