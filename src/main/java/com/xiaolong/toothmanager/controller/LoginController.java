@@ -17,6 +17,7 @@ import com.xiaolong.toothmanager.service.dto.JwtUserDto;
 import com.xiaolong.toothmanager.service.impl.OnlineUserService;
 import com.xiaolong.toothmanager.utils.RedisUtil;
 import com.xiaolong.toothmanager.utils.RsaUtils;
+import com.xiaolong.toothmanager.utils.SecurityUtils;
 import com.xiaolong.toothmanager.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -125,6 +126,12 @@ public class LoginController extends BaseController {
         boolean success = registerService.register(authRegisterDto);
 
         return success;
+    }
+
+    @ApiOperation("获取用户信息")
+    @GetMapping(value = "/info")
+    public Result<Object> getUserInfo() {
+        return Result.success(SecurityUtils.getCurrentUser());
     }
 
     @ApiOperation("登录授权")

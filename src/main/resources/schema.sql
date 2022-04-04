@@ -76,7 +76,7 @@ CREATE TABLE `sys_user_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
-DROP TABLE IF EXISTS `user_info`;
+-- DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE if not exists `user_info` (
     `id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `username` varchar(40) not null unique,
