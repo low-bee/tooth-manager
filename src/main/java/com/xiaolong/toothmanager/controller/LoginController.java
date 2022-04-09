@@ -67,7 +67,7 @@ public class LoginController extends BaseController {
     Producer producer;
 
     @GetMapping("/captcha")
-    public Result<Map<Object, Object>> captcha() throws IOException {
+    public Result<Map<Object, Object>> captcha() {
         // key, value
         // 获取运算的结果
         Captcha captcha = loginProperties.getCaptcha();
@@ -80,10 +80,10 @@ public class LoginController extends BaseController {
         // 保存
         redisUtils.set(uuid, captchaValue, loginProperties.getLoginCode().getExpiration(), TimeUnit.MINUTES);
         // 验证码信息
-        Map<String, Object> imgResult = new HashMap<String, Object>(2) {{
-            put("img", captcha.toBase64());
-            put("uuid", uuid);
-        }};
+//        Map<String, Object> imgResult = new HashMap<String, Object>(2) {{
+//            put("img", captcha.toBase64());
+//            put("uuid", uuid);
+//        }};
 
         return Result.success(
                 MapUtil.builder()
@@ -138,7 +138,6 @@ public class LoginController extends BaseController {
         // 密码解密
         String password = RsaUtils.decryptByPrivateKey(RsaProperties.privateKey, authUser.getPassword());
         // for test 创建一个 uuid 为1的验证码
-        redisUtil.set("12345678", "1");
         // 查询验证码
         String code = (String) redisUtils.get(authUser.getUuid());
         // 清除验证码

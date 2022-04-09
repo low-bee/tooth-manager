@@ -1,87 +1,107 @@
 create database if not exists tooth;
 use tooth;
 SET FOREIGN_KEY_CHECKS=0;
--- ----------------------------
--- Table structure for sys_menu
--- ----------------------------
-DROP TABLE IF EXISTS `sys_menu`;
-CREATE TABLE `sys_menu` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `parent_id` bigint(20) DEFAULT NULL COMMENT '父菜单ID，一级菜单为0',
-  `name` varchar(64) NOT NULL,
-  `path` varchar(255) DEFAULT NULL COMMENT '菜单URL',
-  `perms` varchar(255) DEFAULT NULL COMMENT '授权(多个用逗号分隔，如：user:list,user:create)',
-  `component` varchar(255) DEFAULT NULL,
-  `type` int(5) NOT NULL COMMENT '类型     0：目录   1：菜单   2：按钮',
-  `icon` varchar(32) DEFAULT NULL COMMENT '菜单图标',
-  `orderNum` int(11) DEFAULT NULL COMMENT '排序',
-  `created` datetime NOT NULL,
-  `updated` datetime DEFAULT NULL,
-  `state` int(5) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
--- ----------------------------
--- Table structure for sys_role
--- ----------------------------
+
+
+DROP TABLE IF EXISTS `sys_users_roles`;
+CREATE TABLE `sys_users_roles` (
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+  PRIMARY KEY (`user_id`,`role_id`) USING BTREE,
+  KEY `FKq4eq273l04bpu4efj0jd0jb98` (`role_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='用户角色关联表';
+
+-- 系统角色表
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) NOT NULL,
-  `code` varchar(64) NOT NULL,
-  `remark` varchar(64) DEFAULT NULL COMMENT '备注',
-  `created` datetime DEFAULT NULL,
-  `updated` datetime DEFAULT NULL,
-  `state` int(5) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`) USING BTREE,
-  UNIQUE KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
--- ----------------------------
--- Table structure for sys_role_menu
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role_menu`;
-CREATE TABLE `sys_role_menu` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `role_id` bigint(20) NOT NULL,
-  `menu_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8mb4;
--- ----------------------------
--- Table structure for sys_user
--- ----------------------------
-DROP TABLE IF EXISTS `sys_user`;
-CREATE TABLE `sys_user` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(64) DEFAULT NULL,
-  `password` varchar(64) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
-  `email` varchar(64) DEFAULT NULL,
-  `city` varchar(64) DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `updated` datetime DEFAULT NULL,
-  `last_login` datetime DEFAULT NULL,
-  `state` int(5) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_USERNAME` (`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
--- ----------------------------
--- Table structure for sys_user_role
--- ----------------------------
-DROP TABLE IF EXISTS `sys_user_role`;
-CREATE TABLE `sys_user_role` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+  `role_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `name` varchar(255) NOT NULL COMMENT '名称',
+  `level` int(255) DEFAULT NULL COMMENT '角色级别, 多种控制方式',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `data_scope` varchar(255) DEFAULT NULL COMMENT '数据权限',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
+  `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`role_id`) USING BTREE,
+  UNIQUE KEY `uniq_name` (`name`),
+  KEY `role_name_index` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='role';
 
+-- 角色部门表
+DROP TABLE IF EXISTS `sys_roles_depts`;
+CREATE TABLE `sys_roles_depts` (
+  `role_id` bigint(20) NOT NULL,
+  `dept_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`role_id`,`dept_id`) USING BTREE,
+  KEY `FK7qg6itn5ajdoa9h9o78v9ksur` (`dept_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='role-dept';
+
+-- 部门表
+DROP TABLE IF EXISTS `sys_dept`;
+CREATE TABLE `sys_dept` (
+  `dept_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `pid` bigint(20) DEFAULT NULL COMMENT '上级部门',
+  `sub_count` int(5) DEFAULT 0 COMMENT '子部门数目',
+  `name` varchar(255) NOT NULL COMMENT '名称',
+  `dept_sort` int(5) DEFAULT 999 COMMENT '排序',
+  `enabled` bit(1) NOT NULL COMMENT '状态',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
+  `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`dept_id`) USING BTREE,
+  KEY `inx_pid` (`pid`),
+  KEY `inx_enabled` (`enabled`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='部门';
+
+-- 菜单角色关联表
+DROP TABLE IF EXISTS `sys_roles_menus`;
+CREATE TABLE `sys_roles_menus` (
+  `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
+  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+  PRIMARY KEY (`menu_id`,`role_id`) USING BTREE,
+  KEY `FKcngg2qadojhi3a651a5adkvbq` (`role_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='role-menu';
+
+-- 系统菜单表
+DROP TABLE IF EXISTS `sys_menu`;
+CREATE TABLE `sys_menu` (
+  `menu_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `pid` bigint(20) DEFAULT NULL COMMENT '上级菜单ID',
+  `sub_count` int(5) DEFAULT 0 COMMENT '子菜单数目',
+  `type` int(11) DEFAULT NULL COMMENT '菜单类型',
+  `title` varchar(255) DEFAULT NULL COMMENT '菜单标题',
+  `name` varchar(255) DEFAULT NULL COMMENT '组件名称',
+  `component` varchar(255) DEFAULT NULL COMMENT '组件',
+  `menu_sort` int(5) DEFAULT NULL COMMENT '排序',
+  `icon` varchar(255) DEFAULT NULL COMMENT '图标',
+  `path` varchar(255) DEFAULT NULL COMMENT '链接地址',
+  `i_frame` bit(1) DEFAULT NULL COMMENT '是否外链',
+  `cache` bit(1) DEFAULT b'0' COMMENT '缓存',
+  `hidden` bit(1) DEFAULT b'0' COMMENT '隐藏',
+  `permission` varchar(255) DEFAULT NULL COMMENT '权限',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
+  `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`menu_id`) USING BTREE,
+  UNIQUE KEY `uniq_title` (`title`),
+  UNIQUE KEY `uniq_name` (`name`),
+  KEY `inx_pid` (`pid`)
+) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统菜单';
+
+
+
+-- 系统用户表
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE if not exists `user_info` (
     `id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `username` varchar(40) not null unique,
-    `password` varchar(200) not null COMMENT 'password',
+    `dept_id` bigint(20) DEFAULT NULL COMMENT '部门名称',
+    `username` varchar(255) not null unique COMMENT '用户名',
+    `password` varchar(255) not null COMMENT 'password',
     `avatarUrl` varchar(100) COMMENT '头像地址',
+    `avatar_name` varchar(255) DEFAULT NULL COMMENT '头像地址',
     `level` int not null default 1 COMMENT '用户等级',
     `gender` varchar(2) null default '男' COMMENT '性别',
     `phone` varchar(20) not null unique COMMENT '移动电话',
