@@ -1,12 +1,14 @@
 package com.xiaolong.toothmanager.controller;
 
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Producer;
+import com.wf.captcha.base.Captcha;
 import com.xiaolong.toothmanager.annotation.AnonymousPostMapping;
 import com.xiaolong.toothmanager.common.exception.BadRequestException;
-import com.xiaolong.toothmanager.common.lang.Const;
 import com.xiaolong.toothmanager.common.lang.Result;
 import com.xiaolong.toothmanager.config.RsaProperties;
+import com.xiaolong.toothmanager.security.bean.LoginCodeEnum;
 import com.xiaolong.toothmanager.security.bean.LoginProperties;
 import com.xiaolong.toothmanager.security.bean.SecurityProperties;
 import com.xiaolong.toothmanager.security.secrity.TokenProvider;
@@ -32,18 +34,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Description: 登录模块
@@ -70,26 +67,28 @@ public class LoginController extends BaseController {
     Producer producer;
 
     @GetMapping("/captcha")
-    public Result<Map> captcha() throws IOException {
+    public Result<Map<Object, Object>> captcha() throws IOException {
         // key, value
-        String key = UUID.randomUUID().toString();
-        String code = producer.createText();
-
-        BufferedImage image = producer.createImage(code);
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", byteArrayOutputStream);
-
-        BASE64Encoder base64Encoder = new BASE64Encoder();
-        String str = "data:image/jpeg;base64,";
-        String base64Img = str + base64Encoder.encode(byteArrayOutputStream.toByteArray());
-
-        redisUtil.hset(Const.CAPTCHA_KEY, key, code, LocalTime.of(0, 5));
+        // 获取运算的结果
+        Captcha captcha = loginProperties.getCaptcha();
+        String uuid = properties.getCodeKey() + IdUtil.simpleUUID();
+        //当验证码类型为 arithmetic时且长度 >= 2 时，captcha.text()的结果有几率为浮点型
+        String captchaValue = captcha.text();
+        if (captcha.getCharType() - 1 == LoginCodeEnum.ARITHMETIC.ordinal() && captchaValue.contains(".")) {
+            captchaValue = captchaValue.split("\\.")[0];
+        }
+        // 保存
+        redisUtils.set(uuid, captchaValue, loginProperties.getLoginCode().getExpiration(), TimeUnit.MINUTES);
+        // 验证码信息
+        Map<String, Object> imgResult = new HashMap<String, Object>(2) {{
+            put("img", captcha.toBase64());
+            put("uuid", uuid);
+        }};
 
         return Result.success(
                 MapUtil.builder()
-                        .put("key", key)
-                        .put("base64Img", base64Img)
+                        .put("key", uuid)
+                        .put("base64Img",  captcha.toBase64())
                         .build()
         );
     }
