@@ -1,8 +1,8 @@
 package com.xiaolong.toothmanager.service;
 
-import com.xiaolong.toothmanager.service.dto.Role;
+import com.xiaolong.toothmanager.entity.system.Role;
+import com.xiaolong.toothmanager.entity.system.RoleSmallDto;
 import com.xiaolong.toothmanager.service.dto.RoleDto;
-import com.xiaolong.toothmanager.service.dto.RoleSmallDto;
 import com.xiaolong.toothmanager.service.dto.UserDto;
 import org.springframework.security.core.GrantedAuthority;
 

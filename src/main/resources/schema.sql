@@ -91,7 +91,29 @@ CREATE TABLE `sys_menu` (
   KEY `inx_pid` (`pid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统菜单';
 
+-- 工作表
+DROP TABLE IF EXISTS `sys_job`;
+CREATE TABLE `sys_job` (
+  `job_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `name` varchar(255) NOT NULL COMMENT '岗位名称',
+  `enabled` bit(1) NOT NULL COMMENT '岗位状态',
+  `job_sort` int(5) DEFAULT NULL COMMENT '排序',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
+  `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`job_id`) USING BTREE,
+  UNIQUE KEY `uniq_name` (`name`),
+  KEY `inx_enabled` (`enabled`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='岗位';
 
+-- 用户 工作表
+DROP TABLE IF EXISTS `sys_users_jobs`;
+CREATE TABLE `sys_users_jobs` (
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `job_id` bigint(20) NOT NULL COMMENT '岗位ID',
+  PRIMARY KEY (`user_id`,`job_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 系统用户表
 DROP TABLE IF EXISTS `user_info`;

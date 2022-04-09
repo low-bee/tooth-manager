@@ -1,10 +1,12 @@
 package com.xiaolong.toothmanager.service.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.xiaolong.toothmanager.entity.system.RoleSmallDto;
 import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * @Description: TODO(这里用一句话描述这个类的作用)
@@ -20,13 +22,11 @@ public class UserDto extends BaseDTO implements Serializable {
 
     private Long id;
 
-//    private Set<RoleSmallDto> roles;
-//
-//    private Set<JobSmallDto> jobs;
-//
-//    private DeptSmallDto dept;
+    private Set<RoleSmallDto> roles;
 
-    private Long deptId;
+    private Set<JobSmallDto> jobs;
+
+    private DeptSmallDto dept;
 
     private Integer level;
 

@@ -1,25 +1,39 @@
 package com.xiaolong.toothmanager.service.impl;
 
+import com.xiaolong.toothmanager.entity.system.Menu;
+import com.xiaolong.toothmanager.entity.system.Role;
+import com.xiaolong.toothmanager.entity.system.RoleSmallDto;
+import com.xiaolong.toothmanager.mapper.system.RoleMapper;
+import com.xiaolong.toothmanager.mapper.system.RoleSmallMapper;
 import com.xiaolong.toothmanager.service.RoleService;
-import com.xiaolong.toothmanager.service.dto.Role;
 import com.xiaolong.toothmanager.service.dto.RoleDto;
-import com.xiaolong.toothmanager.service.dto.RoleSmallDto;
 import com.xiaolong.toothmanager.service.dto.UserDto;
+import com.xiaolong.toothmanager.utils.StringUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Component;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
- * @Description: TODO(这里用一句话描述这个类的作用)
+ * @Description: 角色服务类
  * @Author xiaolong
  * @Date 2022/3/29 22:46
  */
-@Component
+@Service
+@RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
+
+    private final RoleMapper roleRepository;
+    private final RoleSmallMapper roleSmallMapper;
+
     @Override
     public List<RoleDto> queryAll() {
         return null;
@@ -47,7 +61,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleSmallDto> findByUsersId(Long id) {
-        return null;
+        return roleSmallMapper.toDto(new ArrayList<>(roleRepository.findByUserId(id)));
     }
 
     @Override
@@ -66,13 +80,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void download(List<RoleDto> queryAll, HttpServletResponse response) throws IOException {
+    public void download(List<RoleDto> queryAll, HttpServletResponse response){
 
-    }
-
-    @Override
-    public List<GrantedAuthority> mapToGrantedAuthorities(UserDto user) {
-        return null;
     }
 
     @Override
@@ -83,5 +92,25 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findInMenuId(List<Long> menuIds) {
         return null;
+    }
+
+    @Override
+    @Cacheable(key = "'auth:' + #p0.id")
+    public List<GrantedAuthority> mapToGrantedAuthorities(UserDto user) {
+        Set<String> permissions = new HashSet<>();
+        // 如果是管理员直接返回
+        if (user.getIsAdmin()) {
+            permissions.add("admin");
+            return permissions.stream().map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        }
+        Set<Role> roles = roleRepository.findByUserId(user.getId());
+        permissions = roles.stream()
+                .flatMap(role -> role.getMenus().stream())
+                .map(Menu::getPermission)
+                .filter(StringUtils::isNotBlank).collect(Collectors.toSet());
+
+        return permissions.stream().map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 }

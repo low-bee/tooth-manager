@@ -21,6 +21,7 @@ public class AuthRegisterDto extends BaseDTO{
     private String gender;
     private String nickName;
     private boolean enable;
+    private DeptSmallDto deptSmallDto;
 
     @NotBlank
     private String username;

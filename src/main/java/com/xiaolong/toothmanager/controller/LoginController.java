@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Producer;
 import com.wf.captcha.base.Captcha;
 import com.xiaolong.toothmanager.annotation.AnonymousDeleteMapping;
+import com.xiaolong.toothmanager.annotation.AnonymousGetMapping;
 import com.xiaolong.toothmanager.annotation.AnonymousPostMapping;
 import com.xiaolong.toothmanager.common.exception.BadRequestException;
 import com.xiaolong.toothmanager.common.lang.Result;
@@ -67,7 +68,7 @@ public class LoginController extends BaseController {
 
     Producer producer;
 
-    @GetMapping("/captcha")
+    @AnonymousGetMapping("/captcha")
     public Result<Map<Object, Object>> captcha() {
         // key, value
         // 获取运算的结果
@@ -83,6 +84,7 @@ public class LoginController extends BaseController {
         return Result.success(
                 MapUtil.builder()
                         .put("key", uuid)
+                        .put("captchaValue", captchaValue)
                         .put("base64Img",  captcha.toBase64())
                         .build()
         );

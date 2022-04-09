@@ -41,6 +41,7 @@ public class RegisterServiceImpl implements RegisterService {
         userDto.setEnabled(true);
         userDto.setCreatedBy(authRegisterDto.getUsername());
         userDto.setCreatedTime(new Timestamp(System.currentTimeMillis()));
+        userDto.setDept(authRegisterDto.getDeptSmallDto());
 
         try {
             userService.insertUser(userDto);
