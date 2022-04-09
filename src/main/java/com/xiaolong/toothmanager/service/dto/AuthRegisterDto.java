@@ -31,6 +31,8 @@ public class AuthRegisterDto extends BaseDTO{
 
     private String email;
 
+    private String dept;
+
 
 
 

@@ -4,6 +4,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Producer;
 import com.wf.captcha.base.Captcha;
+import com.xiaolong.toothmanager.annotation.AnonymousDeleteMapping;
 import com.xiaolong.toothmanager.annotation.AnonymousPostMapping;
 import com.xiaolong.toothmanager.common.exception.BadRequestException;
 import com.xiaolong.toothmanager.common.lang.Result;
@@ -25,6 +26,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -78,12 +80,6 @@ public class LoginController extends BaseController {
         }
         // 保存
         redisUtils.set(uuid, captchaValue, loginProperties.getLoginCode().getExpiration(), TimeUnit.MINUTES);
-        // 验证码信息
-//        Map<String, Object> imgResult = new HashMap<String, Object>(2) {{
-//            put("img", captcha.toBase64());
-//            put("uuid", uuid);
-//        }};
-
         return Result.success(
                 MapUtil.builder()
                         .put("key", uuid)
@@ -170,5 +166,10 @@ public class LoginController extends BaseController {
         return Result.success(authInfo);
     }
 
-
+    @ApiOperation("退出登录")
+    @AnonymousDeleteMapping(value = "/logout")
+    public Result<Object> logout(HttpServletRequest request) {
+        onlineUserService.logout(tokenProvider.getToken(request));
+        return Result.success(HttpStatus.OK);
+    }
 }
