@@ -1,8 +1,8 @@
 package com.xiaolong.toothmanager.controller;
 
 import com.xiaolong.toothmanager.common.exception.BadRequestException;
-import com.xiaolong.toothmanager.common.lang.Const;
 import com.xiaolong.toothmanager.common.lang.Result;
+import com.xiaolong.toothmanager.service.HospitalService;
 import com.xiaolong.toothmanager.service.UserService;
 import com.xiaolong.toothmanager.service.dto.UserHospitalDetailDto;
 import com.xiaolong.toothmanager.utils.RedisUtil;
@@ -31,6 +31,7 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService userService;
+    private final HospitalService hospitalService;
     private final RedisUtil redisUtil;
     private static final String PRE = "override";
     private static final String HOSPITAL = "override";
@@ -57,10 +58,12 @@ public class UserController {
         if (Objects.isNull(userHospitalDetailDto.getUserId())){
             throw new BadRequestException("传入参数userId为空");
         }
+        Long userId = userHospitalDetailDto.getUserId();
+        // find UserHospitalDetailDto by hospitalService id
+        UserHospitalDetailDto userDto = hospitalService.queryUserHospitalDetailDtoByHospitalId(userId);
 
-        // 先从 Redis 内存查询
-        UserHospitalDetailDto userDto = (UserHospitalDetailDto) redisUtil.get(Const.PREFIX_HOSPITAL + userHospitalDetailDto.getUsername());
-
+        // if userDto is null insert 用户医生信息
+        // else update userHospitalDetailDto
         if (Objects.isNull(userDto)){
             // 插入
             userService.insertHospital(userHospitalDetailDto);

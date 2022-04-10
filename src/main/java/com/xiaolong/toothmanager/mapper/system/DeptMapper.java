@@ -17,4 +17,6 @@ public interface DeptMapper extends BaseMapper<Dept> {
     Set<Dept> findByRoleId(Long id);
 
     List<Dept> findByPid(long pid);
+
+    List<Dept> findAll();
 }

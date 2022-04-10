@@ -15,4 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserHospitalMapper extends BaseMapper<UserHospitalDetailDto>  {
     void updateByUserId(UserHospitalDetailDto userHospitalDetailDto);
+
+
 }

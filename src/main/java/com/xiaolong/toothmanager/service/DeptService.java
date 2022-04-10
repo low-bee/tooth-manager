@@ -1,6 +1,8 @@
 package com.xiaolong.toothmanager.service;
 
 import com.xiaolong.toothmanager.entity.system.Dept;
+import com.xiaolong.toothmanager.entity.system.DeptQueryCriteria;
+import com.xiaolong.toothmanager.service.dto.DeptDto;
 
 import java.util.List;
 import java.util.Set;
@@ -35,4 +37,6 @@ public interface DeptService {
      * @return /
      */
     int countByPid(Long pid);
+
+    List<DeptDto> queryAll(DeptQueryCriteria criteria, boolean isQuery) throws IllegalAccessException;
 }

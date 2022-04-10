@@ -1,13 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaolong.toothmanager.mapper.system.RoleMapper">
+<!--
+<resultMap id="BaseResultMap" type="com.chouxiaozi.mybatisdruid.entity.Order" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <collection property="orderDetailList" ofType="com.chouxiaozi.mybatisdruid.entity.OrderDetail">
+      <id column="d_id" property="id" jdbcType="INTEGER" />
+      <result column="d_order_no" property="orderNo" jdbcType="VARCHAR" />
+      <result column="good_name" property="goodName" jdbcType="VARCHAR" />
+      <result column="good_id" property="goodId" jdbcType="INTEGER" />
+      <result column="good_count" property="goodCount" jdbcType="INTEGER" />
+    </collection>
+  </resultMap>
 
-<select id="findByUserId" resultType="com.xiaolong.toothmanager.entity.system.Role">
+<select id="queryOrderList" resultMap="BaseResultMap">
+    SELECT
+      o.*, d.id as d_id,d.order_no as d_order_no,d.good_name,d.good_id,d.good_count
+    FROM
+      tbl_order o
+        LEFT JOIN tbl_order_detail d ON d.order_no = o.order_no
+    where 1=1
+    <if test="orderNo != null and orderNo != ''">
+      and o.order_no = #{orderNo}
+    </if>
+    ORDER BY o.order_time desc
+  </select>
+-->
+    <sql id="Role_Base_Column_List">
+        r.role_id,
+        r.`name`,
+        r.`level`,
+        r.description,
+        r.data_scope,
+        r.create_by,
+        r.update_by,
+        r.create_time,
+        r.update_time
+    </sql>
+
+    <sql id="Dept_Base_Column_List">
+        d.dept_id,
+        d.pid,
+        d.sub_count,
+        d.`name`,
+        d.dept_sort,
+        d.enabled,
+        d.create_by,
+        d.update_by,
+        d.create_time,
+        d.update_time
+    </sql>
+
+    <sql id="Menu_Base_Column_List">
+        m.menu_id,
+        m.pid,
+        m.sub_count,
+        m.`type`,
+        m.title,
+        m.name,
+        m.component,
+        m.menu_sort,
+        m.icon,
+        m.path,
+        m.i_frame,
+        m.cache,
+        m.permission,
+        m.create_by,
+        m.update_by,
+        m.create_time,
+        m.update_time
+    </sql>
+
+
+    <resultMap id="RoleResultMap" type="com.xiaolong.toothmanager.entity.system.Role">
+        <id column="role_id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="level" property="level" jdbcType="VARCHAR" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="data_scope" property="dataScope" jdbcType="VARCHAR" />
+        <result column="create_by" property="createdBy" jdbcType="VARCHAR" />
+        <result column="update_by" property="updatedBy" jdbcType="VARCHAR" />
+        <result column="create_time" property="createdTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        <collection property="depts" ofType="com.xiaolong.toothmanager.entity.system.Dept">
+            <id column="dept_id" property="id" jdbcType="INTEGER" />
+            <result column="name" property="name" jdbcType="VARCHAR" />
+            <result column="pid" property="pid" jdbcType="INTEGER" />
+            <result column="sub_count" property="subCount" jdbcType="INTEGER" />
+            <result column="enabled" property="enabled" jdbcType="BOOLEAN" />
+            <result column="dept_sort" property="deptSort" jdbcType="BOOLEAN" />
+            <result column="create_by" property="createdBy" jdbcType="VARCHAR" />
+            <result column="update_by" property="updatedBy" jdbcType="VARCHAR" />
+            <result column="create_time" property="createdTime" jdbcType="TIMESTAMP" />
+            <result column="update_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        </collection>
+        <collection property="menus" ofType="com.xiaolong.toothmanager.entity.system.Menu">
+            <id column="menu_id" property="id" jdbcType="INTEGER" />
+            <result column="pid" property="pid" jdbcType="VARCHAR" />
+            <result column="sub_count" property="subCount" jdbcType="INTEGER" />
+            <result column="type" property="type" jdbcType="INTEGER" />
+            <result column="title" property="title" jdbcType="VARCHAR" />
+            <result column="name" property="componentName" jdbcType="VARCHAR" />
+            <result column="component" property="component" jdbcType="VARCHAR" />
+            <result column="menu_sort" property="menuSort" jdbcType="INTEGER" />
+            <result column="icon" property="icon" jdbcType="VARCHAR" />
+            <result column="path" property="path" jdbcType="VARCHAR" />
+            <result column="i_frame" property="iFrame" jdbcType="BOOLEAN" />
+            <result column="cache" property="cache" jdbcType="BOOLEAN" />
+            <result column="permission" property="permission" jdbcType="VARCHAR" />
+            <result column="create_by" property="createdBy" jdbcType="VARCHAR" />
+            <result column="update_by" property="updatedBy" jdbcType="VARCHAR" />
+            <result column="create_time" property="createdTime" jdbcType="TIMESTAMP" />
+            <result column="update_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        </collection>
+        <collection property="users" ofType="com.xiaolong.toothmanager.entity.system.User">
+            <id column="id" property="id" jdbcType="BIGINT" />
+            <result column="username" property="username" jdbcType="VARCHAR" />
+            <result column="password" property="password" jdbcType="VARCHAR" />
+            <result column="avatarUrl" property="avatarPath" jdbcType="VARCHAR" />
+            <result column="avatar_name" property="avatarName" jdbcType="VARCHAR" />
+            <result column="gender" property="gender" jdbcType="VARCHAR" />
+            <result column="create_by" property="createdBy" jdbcType="VARCHAR" />
+            <result column="update_by" property="updatedBy" jdbcType="VARCHAR" />
+            <result column="create_time" property="createdTime" jdbcType="TIMESTAMP" />
+            <result column="update_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        </collection>
+    </resultMap>
+
+<select id="findByUserId" resultType="com.xiaolong.toothmanager.entity.system.Role" >
     SELECT
         r.*
     FROM
-        sys_role r, sys_users_roles u
+        sys_role r, sys_users_roles ur
     WHERE
-        r.role_id = u.role_id AND u.user_id = #{id}
+        r.role_id = ur.role_id AND ur.user_id = #{id}
+    </select>
+
+<select id="findAll" resultType="com.xiaolong.toothmanager.entity.system.Role" resultMap="RoleResultMap">
+    SELECT
+        <include refid="Role_Base_Column_List" />,
+        <include refid="Dept_Base_Column_List"/>,
+    from sys_role as r
+
+        left join sys_roles_depts as rd on r.role_id = rd.role_id
+        join  sys_dept as d on rd.dept_id = d.dept_id
     </select>
 </mapper>

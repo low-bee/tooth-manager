@@ -1,8 +1,11 @@
 package com.xiaolong.toothmanager.entity.system;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.xiaolong.toothmanager.service.dto.BaseDTO;
+import com.xiaolong.toothmanager.service.dto.MenuDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Set;
 
@@ -11,8 +14,9 @@ import java.util.Set;
  * @Author xiaolong
  * @Date 2022/4/9 19:32
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class Menu {
+public class Menu extends BaseDTO  {
 
 
 //    @Column(name = "menu_id")
@@ -63,4 +67,23 @@ public class Menu {
 
     @ApiModelProperty(value = "外链菜单")
     private Boolean iFrame;
+
+    public static MenuDto toDo(Menu menu){
+    	MenuDto dto = new MenuDto();
+    	dto.setMenuId(menu.getId());
+    	dto.setTitle(menu.getTitle());
+    	dto.setComponentName(menu.getComponentName());
+    	dto.setMenuSort(menu.getMenuSort());
+    	dto.setComponent(menu.getComponent());
+    	dto.setPath(menu.getPath());
+    	dto.setType(menu.getType());
+    	dto.setPermission(menu.getPermission());
+    	dto.setIcon(menu.getIcon());
+    	dto.setCache(menu.getCache());
+    	dto.setHidden(menu.getHidden());
+    	dto.setPid(menu.getPid());
+    	dto.setIFrame(menu.getIFrame());
+    	dto.setSubCount(menu.getSubCount());
+    	return dto;
+    }
 }

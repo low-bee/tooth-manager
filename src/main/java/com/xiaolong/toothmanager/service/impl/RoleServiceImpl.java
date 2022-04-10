@@ -10,6 +10,7 @@ import com.xiaolong.toothmanager.service.dto.RoleDto;
 import com.xiaolong.toothmanager.service.dto.UserDto;
 import com.xiaolong.toothmanager.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,14 +30,20 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "role")
 public class RoleServiceImpl implements RoleService {
 
     private final RoleMapper roleRepository;
     private final RoleSmallMapper roleSmallMapper;
 
+    /**
+     * 返回所有的角色
+     * @return 角色集合
+     */
     @Override
     public List<RoleDto> queryAll() {
-        return null;
+        List<Role> all = roleRepository.findAll();
+        return all.stream().map(Role::toDo).collect(Collectors.toList());
     }
 
     @Override

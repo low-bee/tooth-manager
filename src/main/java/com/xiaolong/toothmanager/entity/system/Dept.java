@@ -2,10 +2,10 @@ package com.xiaolong.toothmanager.entity.system;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.xiaolong.toothmanager.service.dto.BaseDTO;
+import com.xiaolong.toothmanager.service.dto.DeptDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -43,5 +43,16 @@ public class Dept extends BaseDTO {
 
     @ApiModelProperty(value = "子节点数目", hidden = true)
     private Integer subCount = 0;
+
+    public static DeptDto toDo(Dept dept) {
+        DeptDto deptDto = new DeptDto();
+        deptDto.setId(dept.getId());
+        deptDto.setName(dept.getName());
+        deptDto.setDeptSort(dept.getDeptSort());
+        deptDto.setEnabled(dept.getEnabled());
+        deptDto.setPid(dept.getPid());
+        deptDto.setSubCount(dept.getSubCount());
+        return deptDto;
+    }
 
 }

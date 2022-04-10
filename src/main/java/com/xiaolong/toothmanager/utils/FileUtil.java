@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: TODO(这里用一句话描述这个类的作用)
+ * @Description: 文件工具类, 提供文件上传, 下载, 文件重命名, 文件移动, 文件删除等功能
  * @Author xiaolong
  * @Date 2022/3/28 23:36
  */

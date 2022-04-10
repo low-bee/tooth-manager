@@ -37,7 +37,8 @@ public class RegisterServiceImpl implements RegisterService {
         UserDto userDto = authRegisterDto.toUserDto();
         userDto.setLevel(1);
         userDto.setPercentage(0);
-        userDto.setIsAdmin(false);
+//        userDto.setIsAdmin(false);
+        userDto.setIsAdmin(authRegisterDto.getIsAdmin());
         userDto.setEnabled(true);
         userDto.setCreatedBy(authRegisterDto.getUsername());
         userDto.setCreatedTime(new Timestamp(System.currentTimeMillis()));

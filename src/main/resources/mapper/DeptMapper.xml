@@ -2,6 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaolong.toothmanager.mapper.system.DeptMapper">
 
+    <resultMap id="DeptResultMap" type="com.xiaolong.toothmanager.entity.system.Dept">
+        <id column="dept_id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="pid" property="pid" jdbcType="INTEGER" />
+        <result column="sub_count" property="subCount" jdbcType="INTEGER" />
+        <result column="enabled" property="enabled" jdbcType="BOOLEAN" />
+        <result column="dept_sort" property="deptSort" jdbcType="BOOLEAN" />
+        <result column="create_by" property="createdBy" jdbcType="VARCHAR" />
+        <result column="update_by" property="updatedBy" jdbcType="VARCHAR" />
+        <result column="create_time" property="createdTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        <collection property="roles" ofType="com.xiaolong.toothmanager.entity.system.Role">
+            <id column="role_id" property="id" jdbcType="INTEGER" />
+            <result column="name" property="name" jdbcType="VARCHAR" />
+            <result column="level" property="level" jdbcType="VARCHAR" />
+            <result column="description" property="description" jdbcType="VARCHAR" />
+            <result column="data_scope" property="dataScope" jdbcType="VARCHAR" />
+            <result column="create_by" property="createdBy" jdbcType="VARCHAR" />
+            <result column="update_by" property="updatedBy" jdbcType="VARCHAR" />
+            <result column="create_time" property="createdTime" jdbcType="TIMESTAMP" />
+            <result column="update_time" property="updatedTime" jdbcType="TIMESTAMP" />
+        </collection>
+    </resultMap>
+
 <select id="findByRoleId" resultType="com.xiaolong.toothmanager.entity.system.Dept">
     select d.*
     from sys_dept d, sys_roles_depts r
@@ -19,4 +43,13 @@
     where
         d.pid = #{pid}
     </select>
+
+<select id="findAll" resultType="com.xiaolong.toothmanager.entity.system.Dept" resultMap="DeptResultMap">
+    select
+        <include refid="com.xiaolong.toothmanager.mapper.system.RoleMapper.Dept_Base_Column_List"/>,
+        <include refid="com.xiaolong.toothmanager.mapper.system.RoleMapper.Role_Base_Column_List"/>
+    from sys_dept d
+    left join sys_roles_depts rd on d.dept_id = rd.dept_id
+        join sys_role r on rd.role_id = r.role_id
+</select>
 </mapper>

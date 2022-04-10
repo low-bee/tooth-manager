@@ -22,6 +22,7 @@ public class AuthRegisterDto extends BaseDTO{
     private String nickName;
     private boolean enable;
     private DeptSmallDto deptSmallDto;
+    private Boolean  isAdmin;
 
     @NotBlank
     private String username;
