@@ -14,7 +14,7 @@ public class RoleSmallDto {
     private Long id;
     private String roleName;
     private Integer level;
-    private String dataScopeMenu ;
+    private String dataScope;
     private Set<Menu> menus;
 
 }

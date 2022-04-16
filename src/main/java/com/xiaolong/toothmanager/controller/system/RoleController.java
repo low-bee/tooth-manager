@@ -121,7 +121,7 @@ public class RoleController extends BaseController {
         }
         Role role = Role.builder()
                 .menus(roleSmallDto.getMenus())
-                .dataScope(roleSmallDto.getDataScopeMenu())
+                .dataScope(roleSmallDto.getDataScope())
                 .name(roleSmallDto.getRoleName())
                 .build();
         Boolean flag = roleService.createMenu(role);
@@ -139,7 +139,7 @@ public class RoleController extends BaseController {
         }
         Role role = Role.builder()
                 .menus(roleSmallDto.getMenus())
-                .dataScope(roleSmallDto.getDataScopeMenu())
+                .dataScope(roleSmallDto.getDataScope())
                 .name(roleSmallDto.getRoleName())
                 .build();
         Boolean flag = roleService.deleteMenu(role);
