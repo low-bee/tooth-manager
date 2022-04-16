@@ -1,5 +1,6 @@
 package com.xiaolong.toothmanager.service;
 
+import com.xiaolong.toothmanager.entity.system.Menu;
 import com.xiaolong.toothmanager.entity.system.Role;
 import com.xiaolong.toothmanager.entity.system.RoleSmallDto;
 import com.xiaolong.toothmanager.service.dto.RoleDto;
@@ -30,19 +31,19 @@ public interface RoleService {
      * 创建
      * @param resources /
      */
-    void create(Role resources);
+    Boolean create(Role resources);
 
     /**
      * 编辑
      * @param resources /
      */
-    void update(Role resources);
+    Boolean update(Role resources);
 
     /**
      * 删除
      * @param ids /
      */
-    void delete(Set<Long> ids);
+    Boolean delete(Set<Long> ids);
 
     /**
      * 根据用户ID查询
@@ -113,4 +114,21 @@ public interface RoleService {
      * @return /
      */
     List<Role> findInMenuId(List<Long> menuIds);
+
+
+    Set<Menu> listMenuIdsByRoleId(Long id);
+
+    /**
+     * 创建角色菜单
+     * @param roleSmallDto /
+     * @return /
+     */
+    Boolean createMenu(Role roleSmallDto);
+
+    /**
+     * 删除角色菜单
+     * @param role 待删除角色
+     * @return 是否删除成功
+     */
+    Boolean deleteMenu(Role role);
 }

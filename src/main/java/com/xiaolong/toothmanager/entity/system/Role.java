@@ -7,8 +7,10 @@ import com.xiaolong.toothmanager.service.dto.MenuDto;
 import com.xiaolong.toothmanager.service.dto.RoleDto;
 import com.xiaolong.toothmanager.utils.DataScopeEnum;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Builder
+@NoArgsConstructor
 public class Role extends BaseDTO {
 //    @NotNull(groups = {Update.class})
     @ApiModelProperty(value = "ID", hidden = true)
@@ -66,7 +70,7 @@ public class Role extends BaseDTO {
         roleDto.setId(role.getId());
         roleDto.setName(role.getName());
         roleDto.setMenus(menus);
-        roleDto.setDepts(depts);
+//        roleDto.setDepts(depts);
         roleDto.setDescription(role.getDescription());
         roleDto.setDataScope(role.getDataScope());
         roleDto.setLevel(role.getLevel());

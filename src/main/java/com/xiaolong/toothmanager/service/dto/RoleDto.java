@@ -1,5 +1,6 @@
 package com.xiaolong.toothmanager.service.dto;
 
+import com.xiaolong.toothmanager.entity.system.Role;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,7 +20,7 @@ public class RoleDto extends BaseDTO implements Serializable {
 
     private Set<MenuDto> menus;
 
-    private Set<DeptDto> depts;
+//    private Set<DeptDto> depts;
 
     private String name;
 
@@ -28,4 +29,15 @@ public class RoleDto extends BaseDTO implements Serializable {
     private Integer level;
 
     private String description;
+
+    public static Role toRole(RoleDto roleDto){
+        Role role = new Role();
+        role.setId(roleDto.getId());
+        role.setName(roleDto.getName());
+        role.setDataScope(roleDto.getDataScope());
+        role.setLevel(roleDto.getLevel());
+        role.setDescription(roleDto.getDescription());
+        role.setMenus(role.getMenus());
+        return role;
+    }
 }

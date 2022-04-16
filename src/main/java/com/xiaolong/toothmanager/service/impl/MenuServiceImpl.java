@@ -72,4 +72,14 @@ public class MenuServiceImpl implements MenuService {
         }
         FileUtil.downloadExcel(list, response);
     }
+
+    @Override
+    public void addRoleMenuMap(Long menuId, Long roleId) {
+        menuMapper.addRoleMenuMap(menuId, roleId);
+    }
+
+    @Override
+    public void deleteRoleMenuMap(Long roleId, Long menuId) {
+        menuMapper.deleteRoleMenuMap(roleId, menuId);
+    }
 }

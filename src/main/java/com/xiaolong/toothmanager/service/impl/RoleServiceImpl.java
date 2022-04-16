@@ -1,11 +1,14 @@
 package com.xiaolong.toothmanager.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.xiaolong.toothmanager.entity.system.Menu;
 import com.xiaolong.toothmanager.entity.system.Role;
 import com.xiaolong.toothmanager.entity.system.RoleSmallDto;
 import com.xiaolong.toothmanager.mapper.system.RoleMapper;
 import com.xiaolong.toothmanager.mapper.system.RoleSmallMapper;
+import com.xiaolong.toothmanager.service.MenuService;
 import com.xiaolong.toothmanager.service.RoleService;
+import com.xiaolong.toothmanager.service.dto.MenuDto;
 import com.xiaolong.toothmanager.service.dto.RoleDto;
 import com.xiaolong.toothmanager.service.dto.UserDto;
 import com.xiaolong.toothmanager.utils.StringUtils;
@@ -15,12 +18,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.security.InvalidParameterException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +38,7 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleMapper roleRepository;
     private final RoleSmallMapper roleSmallMapper;
+    private final MenuService menuService;
 
     /**
      * 返回所有的角色
@@ -52,18 +56,55 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void create(Role resources) {
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean create(Role resources) {
+        try {
+            roleRepository.insert(resources);
+        } catch (Exception e) {
+            // 设置仅回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return false;
+        }
 
+        return true;
     }
 
     @Override
-    public void update(Role resources) {
+    public Boolean update(Role resources) {
+        // 通过id更新
+        // resoueces 非空
+        if (Objects.isNull(resources) || resources.getId() == null) {
+            throw new InvalidParameterException("对象为空或id为空");
+        }
 
+
+        UpdateWrapper<Role> roleUpdateWrapper = new UpdateWrapper<>();
+        // mybatis plus 通过id更新
+        try {
+            // 通过id更新
+            roleUpdateWrapper
+                    .setEntity(resources)
+                    .eq("id", resources.getId());
+            roleRepository.update(null, roleUpdateWrapper);
+        } catch (Exception e) {
+            // 设置仅回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
-    public void delete(Set<Long> ids) {
-
+    public Boolean delete(Set<Long> ids) {
+        try {
+            roleRepository.deleteBatchIds(ids);
+        } catch (Exception e) {
+            // 设置仅回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -99,6 +140,65 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findInMenuId(List<Long> menuIds) {
         return null;
+    }
+
+    @Override
+    public Set<Menu> listMenuIdsByRoleId(Long id) {
+        return roleRepository.findMenuByRoleId(id);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean createMenu(Role roleSmallDto) {
+        Set<Menu> menus = roleSmallDto.getMenus();
+        for (Menu menu : menus) {
+            MenuDto menuDto= menuService.queryMenu(menu.getId());
+
+            try {
+                // menuDto 为空, 则添加，否则更新
+                if (Objects.isNull(menuDto)) {
+                    menuService.addMenu(Menu.toDo(menu));
+                    // 添加角色菜单关系
+                    menuService.addRoleMenuMap(menu.getId(), roleSmallDto.getId());
+                } else {
+                    MenuDto menuDto1 = Menu.toDo(menu);
+                        menuDto1.setMenuId(menu.getId());
+                    menuService.updateMenu(menuDto1);
+                    // 角色菜单关系不变，不需要修改
+                }
+            } catch (Exception e) {
+                // 设置仅回滚
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean deleteMenu(Role role) {
+        if (Objects.isNull(role.getId()) || role.getMenus().isEmpty()) {
+            return true;
+        }
+
+        for (Menu menu : role.getMenus()) {
+            MenuDto menuDto= menuService.queryMenu(menu.getId());
+            if (!Objects.isNull(menuDto)) {
+                try {
+                    // 删除角色菜单
+                    menuService.deleteMenu(menu.getId());
+                    // 删除角色菜单关系
+                    menuService.deleteRoleMenuMap(role.getId(), menu.getId());
+                } catch (Exception e) {
+                    // 设置仅回滚
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override

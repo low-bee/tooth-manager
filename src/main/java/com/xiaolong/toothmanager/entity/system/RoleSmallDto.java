@@ -2,6 +2,8 @@ package com.xiaolong.toothmanager.entity.system;
 
 import lombok.Data;
 
+import java.util.Set;
+
 /**
  * @Description: 用lombox注解来描述实体类
  * @Author xiaolong
@@ -12,6 +14,7 @@ public class RoleSmallDto {
     private Long id;
     private String roleName;
     private Integer level;
-    private String dataScope;
+    private String dataScopeMenu ;
+    private Set<Menu> menus;
 
 }

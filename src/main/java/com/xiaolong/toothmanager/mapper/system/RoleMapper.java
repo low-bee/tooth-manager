@@ -2,6 +2,7 @@ package com.xiaolong.toothmanager.mapper.system;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xiaolong.toothmanager.entity.system.Menu;
 import com.xiaolong.toothmanager.entity.system.Role;
 import org.springframework.stereotype.Repository;
 
@@ -19,4 +20,6 @@ public interface RoleMapper extends BaseMapper<Role> {
     Set<Role> findByUserId(Long id);
 
     List<Role> findAll();
+
+    Set<Menu> findMenuByRoleId(Long id);
 }

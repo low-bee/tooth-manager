@@ -27,5 +27,8 @@ public interface MenuService {
 
     void download(List<MenuDto> queryAll, HttpServletResponse response) throws IOException;
 
+    void addRoleMenuMap(Long menuId, Long roleId);
+
+    void deleteRoleMenuMap(Long roleId, Long menuId);
 }
 
