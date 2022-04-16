@@ -41,7 +41,7 @@ public class MenuController {
     @PreAuthorize("@el.check('menu:add')")
     public Result<Object> createMenu(@Validated @RequestBody Menu resources){
         if (resources.getId() != null) {
-            throw new BadRequestException("A new menu cannot already have an ID");
+            throw new BadRequestException("A new" + ENTITY_NAME  +"cannot already have an ID");
         }
         MenuDto menuDto = Menu.toDo(resources);
         menuService.addMenu(menuDto);
@@ -55,7 +55,7 @@ public class MenuController {
     @PreAuthorize("@el.check('menu:add')")
     public Result<Object> updateMenu(@Validated @RequestBody Menu resources){
         if (resources.getId() == null) {
-            throw new BadRequestException("A new menu must have an ID");
+            throw new BadRequestException("A new" + ENTITY_NAME  +"must have an ID");
         }
         MenuDto menuDto = Menu.toDo(resources);
         menuService.updateMenu(menuDto);
@@ -68,7 +68,7 @@ public class MenuController {
     @PreAuthorize("@el.check('menu:add')")
     public Result<Object> deleteMenu(@RequestParam Long id){
         if (id == null) {
-            throw new BadRequestException("delete menu must have an ID");
+            throw new BadRequestException("delete" + ENTITY_NAME  +"must have an ID");
         }
         menuService.deleteMenu(id);
         return Result.success(HttpStatus.OK);
@@ -81,7 +81,7 @@ public class MenuController {
     @PreAuthorize("@el.check('menu:list')")
     public Result<MenuDto> findMenuById(@RequestParam Long id){
         if (id == null) {
-            throw new BadRequestException("query menu must have an ID");
+            throw new BadRequestException("query" + ENTITY_NAME  +"must have an ID");
         }
         MenuDto menuDto = menuService.queryMenu(id);
         return Result.success(menuDto);
