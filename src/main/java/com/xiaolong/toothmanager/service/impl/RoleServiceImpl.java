@@ -6,9 +6,7 @@ import com.xiaolong.toothmanager.entity.system.Role;
 import com.xiaolong.toothmanager.entity.system.RoleSmallDto;
 import com.xiaolong.toothmanager.mapper.system.RoleMapper;
 import com.xiaolong.toothmanager.mapper.system.RoleSmallMapper;
-import com.xiaolong.toothmanager.service.MenuService;
 import com.xiaolong.toothmanager.service.RoleService;
-import com.xiaolong.toothmanager.service.dto.MenuDto;
 import com.xiaolong.toothmanager.service.dto.RoleDto;
 import com.xiaolong.toothmanager.service.dto.UserDto;
 import com.xiaolong.toothmanager.utils.StringUtils;
@@ -38,7 +36,6 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleMapper roleRepository;
     private final RoleSmallMapper roleSmallMapper;
-    private final MenuService menuService;
 
     /**
      * 返回所有的角色
@@ -73,7 +70,7 @@ public class RoleServiceImpl implements RoleService {
     public Boolean update(Role resources) {
         // 通过id更新
         // resoueces 非空
-        if (Objects.isNull(resources) || resources.getId() == null) {
+        if (Objects.isNull(resources) || resources.getRoleId() == null) {
             throw new InvalidParameterException("对象为空或id为空");
         }
 
@@ -84,7 +81,7 @@ public class RoleServiceImpl implements RoleService {
             // 通过id更新
             roleUpdateWrapper
                     .setEntity(resources)
-                    .eq("id", resources.getId());
+                    .eq("id", resources.getRoleId());
             roleRepository.update(null, roleUpdateWrapper);
         } catch (Exception e) {
             // 设置仅回滚
@@ -149,53 +146,35 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean createMenu(Role roleSmallDto) {
-        Set<Menu> menus = roleSmallDto.getMenus();
-        for (Menu menu : menus) {
-            MenuDto menuDto= menuService.queryMenu(menu.getId());
+    public Boolean createMenu(Role role, List<Long> menuIds) {
 
+        for (Long menuId : menuIds) {
             try {
-                // menuDto 为空, 则添加，否则更新
-                if (Objects.isNull(menuDto)) {
-                    menuService.addMenu(Menu.toDo(menu));
-                    // 添加角色菜单关系
-                    menuService.addRoleMenuMap(menu.getId(), roleSmallDto.getId());
-                } else {
-                    MenuDto menuDto1 = Menu.toDo(menu);
-                        menuDto1.setMenuId(menu.getId());
-                    menuService.updateMenu(menuDto1);
-                    // 角色菜单关系不变，不需要修改
-                }
+                roleRepository.addRoleMenuMap(role.getRoleId(), menuId);
             } catch (Exception e) {
                 // 设置仅回滚
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return false;
             }
         }
-
         return true;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteMenu(Role role) {
-        if (Objects.isNull(role.getId()) || role.getMenus().isEmpty()) {
+        if (Objects.isNull(role.getRoleId()) || role.getMenus().isEmpty()) {
             return true;
         }
+        List<Long> menuIds = role.getMenus().stream().map(Menu::getMenuId).collect(Collectors.toList());
 
-        for (Menu menu : role.getMenus()) {
-            MenuDto menuDto= menuService.queryMenu(menu.getId());
-            if (!Objects.isNull(menuDto)) {
-                try {
-                    // 删除角色菜单
-                    menuService.deleteMenu(menu.getId());
-                    // 删除角色菜单关系
-                    menuService.deleteRoleMenuMap(role.getId(), menu.getId());
-                } catch (Exception e) {
-                    // 设置仅回滚
-                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                    return false;
-                }
+        for (Long menuId : menuIds) {
+            try {
+                roleRepository.deleteRoleMenuMap(role.getRoleId(), menuId);
+            } catch (Exception e) {
+                // 设置仅回滚
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return false;
             }
         }
         return true;

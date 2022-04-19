@@ -14,7 +14,7 @@
         <result column="create_time" property="createdTime" jdbcType="TIMESTAMP" />
         <result column="update_time" property="updatedTime" jdbcType="TIMESTAMP" />
         <collection property="roles" ofType="com.xiaolong.toothmanager.entity.system.Role">
-            <id column="role_id" property="id" jdbcType="INTEGER" />
+            <id column="role_id" property="roleId" jdbcType="INTEGER" />
             <result column="name" property="name" jdbcType="VARCHAR" />
             <result column="level" property="level" jdbcType="VARCHAR" />
             <result column="description" property="description" jdbcType="VARCHAR" />

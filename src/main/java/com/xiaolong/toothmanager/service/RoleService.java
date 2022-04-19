@@ -123,7 +123,7 @@ public interface RoleService {
      * @param roleSmallDto /
      * @return /
      */
-    Boolean createMenu(Role roleSmallDto);
+    Boolean createMenu(Role roleSmallDto, List<Long> menuIds);
 
     /**
      * 删除角色菜单

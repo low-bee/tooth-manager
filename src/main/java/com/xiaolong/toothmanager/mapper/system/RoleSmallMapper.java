@@ -27,8 +27,11 @@ public interface RoleSmallMapper extends BaseMapper<RoleSmall> {
         List<RoleSmallDto> roleSmallDtos = new ArrayList<>();
         for (Role role : roles) {
             RoleSmallDto roleSmallDto = new RoleSmallDto();
-            roleSmallDto.setId(role.getId());
+            roleSmallDto.setId(role.getRoleId());
             roleSmallDto.setRoleName(role.getName());
+            roleSmallDto.setDataScope(role.getDataScope());
+            roleSmallDto.setLevel(role.getLevel());
+            roleSmallDto.setMenus(role.getMenus());
             roleSmallDtos.add(roleSmallDto);
         }
         return roleSmallDtos;

@@ -26,9 +26,9 @@ public class TestPassEncoder {
     @Test
     public void testEncoderByDatabase(){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String chuanzhi = "$2a$10$oOGHTVAtLvzrktn8ALpH4Op2Q6LT4sXaLytFsLUYmglr44/E2CnNu";
+        String chuanzhi = "$2a$10$Egp1/gvFlt7zhlXVfEFw4OfWQCGPw0ClmMcc6FjTnvXNRVf9zdMRa";
         log.info(chuanzhi);
-        Assert.assertTrue(passwordEncoder.matches("chuanzhi" , chuanzhi));
+        Assert.assertTrue(passwordEncoder.matches("123456" , chuanzhi));
     }
 
 

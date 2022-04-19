@@ -33,6 +33,7 @@
 
     <sql id="userInfo">
         t1.id,
+        t1.dept_id,
         t1.username,
         t1.password,
         t1.avatarUrl,
@@ -97,4 +98,14 @@
         ) values (#{userId}, #{username}, #{hospital}, #{province}, #{city}, #{lowCity}, #{addressDetail},
         #{createdBy}, #{createdTime})
     </insert>
+
+    <insert id="insertUserRole">
+        insert into
+            sys_users_roles (user_id, role_id)
+        values (#{userId}, #{roleId})
+    </insert>
+
+    <delete id="deleteUserRole">
+        delete from sys_users_roles where user_id = #{userId} and role_id = #{roleId}
+    </delete>
 </mapper>

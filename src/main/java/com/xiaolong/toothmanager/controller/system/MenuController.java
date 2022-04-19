@@ -7,6 +7,7 @@ import com.xiaolong.toothmanager.entity.system.Menu;
 import com.xiaolong.toothmanager.entity.system.MenuQueryCriteria;
 import com.xiaolong.toothmanager.service.MenuService;
 import com.xiaolong.toothmanager.service.dto.MenuDto;
+import com.xiaolong.toothmanager.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @Description:  用户菜单Controller
@@ -40,7 +42,7 @@ public class MenuController {
     @PostMapping("/add")
     @PreAuthorize("@el.check('menu:add')")
     public Result<Object> createMenu(@Validated @RequestBody Menu resources){
-        if (resources.getId() != null) {
+        if (resources.getMenuId() != null) {
             throw new BadRequestException("A new" + ENTITY_NAME  +"cannot already have an ID");
         }
         MenuDto menuDto = Menu.toDo(resources);
@@ -54,7 +56,7 @@ public class MenuController {
     @PostMapping("/update")
     @PreAuthorize("@el.check('menu:add')")
     public Result<Object> updateMenu(@Validated @RequestBody Menu resources){
-        if (resources.getId() == null) {
+        if (resources.getMenuId() == null) {
             throw new BadRequestException("A new" + ENTITY_NAME  +"must have an ID");
         }
         MenuDto menuDto = Menu.toDo(resources);
@@ -92,5 +94,14 @@ public class MenuController {
     @PreAuthorize("@el.check('menu:list')")
     public void exportMenu(HttpServletResponse response, MenuQueryCriteria criteria) throws Exception {
         menuService.download(menuService.queryAll(criteria, false), response);
+    }
+
+    @GetMapping(value = "/build")
+    @ApiOperation("获取前端所需菜单")
+    @PreAuthorize("@el.check('menu:list')")
+    public Result<Object> buildMenus(){
+        List<MenuDto> menuDtoList = menuService.findByUser(SecurityUtils.getCurrentUserId());
+        List<MenuDto> menuDtos = menuService.buildTree(menuDtoList);
+        return Result.success(menuService.buildMenus(menuDtos));
     }
 }

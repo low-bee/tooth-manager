@@ -69,15 +69,15 @@
         m.i_frame,
         m.cache,
         m.permission,
-        m.create_by,
-        m.update_by,
-        m.create_time,
-        m.update_time
+        m.created_by,
+        m.updated_by,
+        m.created_time,
+        m.updated_time
     </sql>
 
 
     <resultMap id="RoleResultMap" type="com.xiaolong.toothmanager.entity.system.Role">
-        <id column="role_id" property="id" jdbcType="INTEGER" />
+        <id column="role_id" property="roleId" jdbcType="INTEGER" />
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="level" property="level" jdbcType="VARCHAR" />
         <result column="description" property="description" jdbcType="VARCHAR" />
@@ -99,7 +99,7 @@
 <!--            <result column="update_time" property="updatedTime" jdbcType="TIMESTAMP" />-->
 <!--        </collection>-->
         <collection property="menus" ofType="com.xiaolong.toothmanager.entity.system.Menu">
-            <id column="menu_id" property="id" jdbcType="INTEGER" />
+            <id column="menu_id" property="menuId" jdbcType="INTEGER" />
             <result column="pid" property="pid" jdbcType="VARCHAR" />
             <result column="sub_count" property="subCount" jdbcType="INTEGER" />
             <result column="type" property="type" jdbcType="INTEGER" />
@@ -157,4 +157,12 @@
         join sys_roles_menus as rm on m.menu_id = rm.menu_id
         where rm.role_id = #{id}
     </select>
+
+    <insert id="addRoleMenuMap">
+        INSERT INTO `sys_roles_menus` (`role_id`, `menu_id`) VALUES (#{roleId}, #{menuId})
+    </insert>
+
+    <delete id="deleteRoleMenuMap">
+        DELETE FROM `sys_roles_menus` WHERE `role_id` = #{roleId} and `menu_id` = #{menuId}
+    </delete>
 </mapper>

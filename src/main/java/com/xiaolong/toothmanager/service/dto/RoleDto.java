@@ -32,7 +32,7 @@ public class RoleDto extends BaseDTO implements Serializable {
 
     public static Role toRole(RoleDto roleDto){
         Role role = new Role();
-        role.setId(roleDto.getId());
+        role.setRoleId(roleDto.getId());
         role.setName(roleDto.getName());
         role.setDataScope(roleDto.getDataScope());
         role.setLevel(roleDto.getLevel());

@@ -20,8 +20,9 @@ public class Menu extends BaseDTO  {
 
 
 //    @Column(name = "menu_id")
-    @ApiModelProperty(value = "ID", hidden = true)
-    private Long id;
+//    @ApiModelProperty(value = "ID", hidden = true)
+
+    private Long menuId;
 
     @JSONField(serialize = false)
     @ApiModelProperty(value = "菜单角色")
@@ -70,7 +71,7 @@ public class Menu extends BaseDTO  {
 
     public static MenuDto toDo(Menu menu){
     	MenuDto dto = new MenuDto();
-    	dto.setMenuId(menu.getId());
+    	dto.setMenuId(menu.getMenuId());
     	dto.setTitle(menu.getTitle());
     	dto.setComponentName(menu.getComponentName());
     	dto.setMenuSort(menu.getMenuSort());

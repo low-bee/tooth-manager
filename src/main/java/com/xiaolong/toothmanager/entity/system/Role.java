@@ -1,16 +1,14 @@
 package com.xiaolong.toothmanager.entity.system;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.xiaolong.toothmanager.service.dto.BaseDTO;
 import com.xiaolong.toothmanager.service.dto.DeptDto;
 import com.xiaolong.toothmanager.service.dto.MenuDto;
 import com.xiaolong.toothmanager.service.dto.RoleDto;
 import com.xiaolong.toothmanager.utils.DataScopeEnum;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
@@ -25,10 +23,13 @@ import java.util.stream.Collectors;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Role extends BaseDTO {
 //    @NotNull(groups = {Update.class})
-    @ApiModelProperty(value = "ID", hidden = true)
-    private Long id;
+//    @ApiModelProperty(value = "ID", hidden = true)
+//    @TableId("role_id")
+    @TableField("role_id")
+    private Long roleId;
 
     @JSONField(serialize = false)
     @ApiModelProperty(value = "用户", hidden = true)
@@ -67,7 +68,7 @@ public class Role extends BaseDTO {
         Set<DeptDto> depts = role.getDepts().stream().map(Dept::toDo).collect(Collectors.toSet());
 
         RoleDto roleDto = new RoleDto();
-        roleDto.setId(role.getId());
+        roleDto.setId(role.getRoleId());
         roleDto.setName(role.getName());
         roleDto.setMenus(menus);
 //        roleDto.setDepts(depts);

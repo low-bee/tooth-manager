@@ -13,8 +13,8 @@ public interface UserService {
 
     /**
      * 通过用户名查询用户
-     * @param username
-     * @return
+     * @param username //用户名
+     * @return /
      */
     UserDto findByUsername(String username);
 
@@ -27,4 +27,8 @@ public interface UserService {
     void insertHospital(UserHospitalDetailDto userHospitalDetailDto);
 
     void updateHospitalByUserId(Long userId, UserHospitalDetailDto userHospitalDetailDto);
+
+    Boolean addUserRole(Long userId, Long roleId);
+
+    Boolean deleteUserRole(Long userId, Long roleId);
 }

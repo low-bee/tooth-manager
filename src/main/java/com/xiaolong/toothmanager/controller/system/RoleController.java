@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 角色控制器, 角色和菜单是一对多的关系，一个角色有多个菜单
@@ -28,7 +29,7 @@ import java.util.Set;
  */
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "系统：菜单管理")
+@Api(tags = "系统：角色管理")
 @RequestMapping("/api/role")
 public class RoleController extends BaseController {
 
@@ -124,7 +125,9 @@ public class RoleController extends BaseController {
                 .dataScope(roleSmallDto.getDataScope())
                 .name(roleSmallDto.getRoleName())
                 .build();
-        Boolean flag = roleService.createMenu(role);
+
+        Boolean flag = roleService.createMenu(role, roleSmallDto.getMenus().stream().map(Menu::getMenuId).collect(Collectors.toList()));
+
         return Result.success(flag);
     }
 

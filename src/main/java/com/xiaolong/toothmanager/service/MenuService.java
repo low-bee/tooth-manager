@@ -30,5 +30,20 @@ public interface MenuService {
     void addRoleMenuMap(Long menuId, Long roleId);
 
     void deleteRoleMenuMap(Long roleId, Long menuId);
+
+    /**
+     * 通过用户 id 查询菜单
+     * @param currentUserId 用户 id
+     * @return 菜单列表
+     */
+    List<MenuDto> findByUser(Long currentUserId);
+    /**
+     * 构建角色菜单树
+     * @param menuDtoList 菜单列表
+     * @return 菜单列表
+     */
+    List<MenuDto> buildTree(List<MenuDto> menuDtoList);
+
+    Object buildMenus(List<MenuDto> menuDtos);
 }
 

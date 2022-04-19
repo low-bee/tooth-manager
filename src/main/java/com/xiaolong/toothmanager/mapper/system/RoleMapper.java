@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xiaolong.toothmanager.entity.system.Menu;
 import com.xiaolong.toothmanager.entity.system.Role;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,4 +23,8 @@ public interface RoleMapper extends BaseMapper<Role> {
     List<Role> findAll();
 
     Set<Menu> findMenuByRoleId(Long id);
+
+    void addRoleMenuMap(@Param("roleId")  Long roleId, @Param("menuId")  Long menuId);
+
+    void deleteRoleMenuMap(@Param("roleId")  Long roleId, @Param("menuId")  Long menuId);
 }

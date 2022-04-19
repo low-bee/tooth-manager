@@ -9,4 +9,19 @@
 <delete id="deleteRoleMenuMap">
     DELETE FROM `sys_roles_menus` WHERE `role_id` = #{roleId} and `menu_id` = #{menuId}
     </delete>
+
+<select id="findByRoleIdsAndTypeNot" resultType="com.xiaolong.toothmanager.entity.system.Menu">
+    SELECT
+        <include refid="com.xiaolong.toothmanager.mapper.system.RoleMapper.Menu_Base_Column_List" />
+    FROM sys_menu m, sys_roles_menus rm
+
+    WHERE
+            m.menu_id = rm.menu_id
+      AND rm.role_id IN
+    <foreach collection="roleIds" item="id" index="index" open="(" close=")" separator=",">
+        #{id}
+    </foreach>
+      AND type != #{type}
+    order by m.menu_sort asc
+    </select>
 </mapper>

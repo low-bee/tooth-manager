@@ -1,6 +1,7 @@
 package com.xiaolong.toothmanager.service.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +19,7 @@ import java.util.List;
 @TableName("sys_menu")
 public class MenuDto  extends BaseDTO implements Serializable {
 
+    @TableId("menu_id")
     private Long menuId;
 
     private Integer type;

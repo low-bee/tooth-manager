@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xiaolong.toothmanager.service.dto.UserDto;
 import com.xiaolong.toothmanager.service.dto.UserHospitalDetailDto;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -23,4 +24,7 @@ public interface UserMapper extends BaseMapper<UserDto> {
 
     boolean insertHospital(UserHospitalDetailDto userHospitalDetailDto);
 
+    void insertUserRole(@Param("userId") Long userId, @Param("roleId")  Long roleId);
+
+    void deleteUserRole(@Param("userId") Long userId, @Param("roleId")  Long roleId);
 }
