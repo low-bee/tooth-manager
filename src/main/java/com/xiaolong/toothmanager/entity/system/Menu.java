@@ -1,6 +1,7 @@
 package com.xiaolong.toothmanager.entity.system;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.xiaolong.toothmanager.service.dto.BaseDTO;
 import com.xiaolong.toothmanager.service.dto.MenuDto;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,7 +22,7 @@ public class Menu extends BaseDTO  {
 
 //    @Column(name = "menu_id")
 //    @ApiModelProperty(value = "ID", hidden = true)
-
+    @TableId("menu_id")
     private Long menuId;
 
     @JSONField(serialize = false)

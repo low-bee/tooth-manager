@@ -8,7 +8,6 @@ import com.xiaolong.toothmanager.annotation.AnonymousDeleteMapping;
 import com.xiaolong.toothmanager.annotation.AnonymousGetMapping;
 import com.xiaolong.toothmanager.annotation.AnonymousPostMapping;
 import com.xiaolong.toothmanager.common.exception.BadRequestException;
-import com.xiaolong.toothmanager.common.lang.Result;
 import com.xiaolong.toothmanager.config.RsaProperties;
 import com.xiaolong.toothmanager.security.bean.LoginCodeEnum;
 import com.xiaolong.toothmanager.security.bean.LoginProperties;
@@ -28,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -69,7 +69,7 @@ public class LoginController extends BaseController {
     Producer producer;
 
     @AnonymousGetMapping("/captcha")
-    public Result<Map<Object, Object>> captcha() {
+    public ResponseEntity<Map<Object, Object>> captcha() {
         // key, value
         // 获取运算的结果
         Captcha captcha = loginProperties.getCaptcha();
@@ -81,7 +81,7 @@ public class LoginController extends BaseController {
         }
         // 保存
         redisUtils.set(uuid, captchaValue, loginProperties.getLoginCode().getExpiration(), TimeUnit.MINUTES);
-        return Result.success(
+        return ResponseEntity.ok(
                 MapUtil.builder()
                         .put("key", uuid)
                         .put("captchaValue", captchaValue)
@@ -92,7 +92,7 @@ public class LoginController extends BaseController {
 
     @ApiOperation("登录注册")
     @AnonymousPostMapping(value = "/register/test")
-    public Result<AuthRegisterDto> getKey(@Validated @RequestBody AuthRegisterDto authRegisterDto, HttpServletRequest request) throws Exception {
+    public ResponseEntity<AuthRegisterDto> getKey(@Validated @RequestBody AuthRegisterDto authRegisterDto, HttpServletRequest request) throws Exception {
         if (StringUtils.isEmpty(authRegisterDto.getPassword())) {
             throw new BadRequestException("参数解析错误!");
         }
@@ -100,12 +100,12 @@ public class LoginController extends BaseController {
         String s = RsaUtils.encryptByPublicKey(RsaProperties.publicKey, authRegisterDto.getPassword());
         authRegisterDto.setPassword(s);
 
-        return Result.success(authRegisterDto);
+        return new ResponseEntity<>(authRegisterDto, HttpStatus.OK);
     }
 
     @ApiOperation("登录注册")
     @AnonymousPostMapping(value = "/register")
-    public boolean register(@Validated @RequestBody AuthRegisterDto authRegisterDto, HttpServletRequest request) throws Exception {
+    public ResponseEntity<Boolean> register(@Validated @RequestBody AuthRegisterDto authRegisterDto, HttpServletRequest request) throws Exception {
 
         if (StringUtils.isEmpty(authRegisterDto.getPassword())
                 || StringUtils.isEmpty(authRegisterDto.getUsername())
@@ -119,19 +119,19 @@ public class LoginController extends BaseController {
             throw new BadRequestException("输入的密码为空");
         }
         authRegisterDto.setPassword(password);
-
-        return registerService.register(authRegisterDto);
+        boolean register = registerService.register(authRegisterDto);
+        return new ResponseEntity<>(register, register ? HttpStatus.OK: HttpStatus.BAD_REQUEST);
     }
 
     @ApiOperation("获取用户信息")
     @GetMapping(value = "/info")
-    public Result<Object> getUserInfo() {
-        return Result.success(SecurityUtils.getCurrentUser());
+    public ResponseEntity<Object> getUserInfo() {
+        return new ResponseEntity<>(SecurityUtils.getCurrentUser(), HttpStatus.OK);
     }
 
     @ApiOperation("登录授权")
     @AnonymousPostMapping(value = "/login")
-    public Result<Object> login(@Validated @RequestBody AuthUserDto authUser, HttpServletRequest request) throws Exception {
+    public ResponseEntity<Object> login(@Validated @RequestBody AuthUserDto authUser, HttpServletRequest request) throws Exception {
         // 密码解密
         String password = RsaUtils.decryptByPrivateKey(RsaProperties.privateKey, authUser.getPassword());
         // for test 创建一个 uuid 为1的验证码
@@ -165,13 +165,15 @@ public class LoginController extends BaseController {
             //踢掉之前已经登录的token
             onlineUserService.checkLoginOnUser(authUser.getUsername(), token);
         }
-        return Result.success(authInfo);
+        return ResponseEntity.status(HttpStatus.OK).body(authInfo);
     }
 
     @ApiOperation("退出登录")
     @AnonymousDeleteMapping(value = "/logout")
-    public Result<Object> logout(HttpServletRequest request) {
+    public ResponseEntity<Object> logout(HttpServletRequest request) {
         onlineUserService.logout(tokenProvider.getToken(request));
-        return Result.success(HttpStatus.OK);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("登出成功");
     }
 }
