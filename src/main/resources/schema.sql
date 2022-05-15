@@ -294,7 +294,29 @@ INSERT INTO `sys_menu` VALUES (116, 36, 0, 1, '生成预览', 'Preview', 'genera
 COMMIT;
 
 -- 工作表
-DROP TABLE IF EXISTS `sys_job`;
+DROP TABLE IF EXISTS `sys_job`;DROP TABLE IF EXISTS `user_info`;
+                               CREATE TABLE if not exists `user_info` (
+                                   `id` bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                   `dept_id` bigint(20) DEFAULT NULL COMMENT '部门名称',
+                                   `username` varchar(255) not null unique COMMENT '用户名',
+                                   `password` varchar(255) not null COMMENT 'password',
+                                   `avatarUrl` varchar(100) COMMENT '头像地址',
+                                   `avatar_name` varchar(255) DEFAULT NULL COMMENT '头像地址',
+                                   `level` int not null default 1 COMMENT '用户等级',
+                                   `gender` varchar(2) null default '男' COMMENT '性别',
+                                   `phone` varchar(20) not null unique COMMENT '移动电话',
+                                   `email` varchar(50) COMMENT '邮箱',
+                                   `telephone` varchar(20) COMMENT '固定电话',
+                                   `percentage` smallint COMMENT '百分比，0-100',
+                                   `nick_name` varchar(20) not null default "医生" COMMENT '用户类型',
+                                   `enable` boolean not null default false COMMENT '用户是否激活',
+                                   `isAdmin` boolean not null default 0 COMMENT '是否是管理员',
+                                   `pwdResetTime` datetime null COMMENT '密码修改时间',
+                                   `createdTime` datetime null COMMENT '创建时间',
+                                   `createdBy` varchar(40) null COMMENT '创建时间',
+                                   `updatedTime` datetime null COMMENT '修改时间',
+                                   `updatedBy` varchar(40) null COMMENT '修改人'
+                               ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `sys_job` (
   `job_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `name` varchar(255) NOT NULL COMMENT '岗位名称',
